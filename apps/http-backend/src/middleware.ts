@@ -18,8 +18,13 @@ function authMiddleware (req : AuthRequest, res : Response , next  : NextFunctio
        try {
         
         const decodedtoken = jwt.verify(token , JWT_SECRET) as { id: string }
-        req.id = decodedtoken.id
-        next()
+        if(decodedtoken){
+            req.id = decodedtoken.id
+            next()
+        }else{
+            return res.json({message: 'UnAuthorized'})
+        }
+      
        } catch (error) {
         return res.status(403).json({ message: "Invalid or expired token" });
        }

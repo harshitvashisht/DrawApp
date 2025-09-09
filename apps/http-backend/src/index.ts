@@ -87,7 +87,6 @@ app.post('/room', authMiddleware ,async function (req:Request , res: Response) {
   try {
 //@ts-ignore
     const id = req.id 
-
     const room = await prismaClient.room.create({
       data: {
              slug : data.data.room,
