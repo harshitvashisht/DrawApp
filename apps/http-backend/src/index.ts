@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken"
 import { JWT_SECRET } from '@repo/backend-common/config'
 import {CreateUserSchema, CreateSigninSchema, CreateRoomSchema} from "@repo/common/types"
+import authMiddleware from './middleware'
 const app = express()
 app.use(express.json())
 
@@ -75,13 +76,34 @@ app.post('/signin', async function (req:Request , res: Response) {
 
 })
 
-app.post('/room', async function (req:Request , res: Response) {
-      const data = CreateRoomSchema.safeParse(req.body);
-  if(!data.success){
-    res.json({message: "Incorrect Inputs"})
+app.post('/room', authMiddleware ,async function (req:Request , res: Response) {
+   
+ const data = CreateRoomSchema.safeParse(req.body)
+
+ if(!data.success){
+    res.json({message:"Incorrect Inputs"})
     return
   } 
-      
+  try {
+//@ts-ignore
+    const id = req.id 
+
+    const room = await prismaClient.room.create({
+      data: {
+             slug : data.data.room,
+             adminId : id
+      }
+    })
+
+    return res.json ({
+      message: "room-Created",
+      room
+    })
+  } catch (error) {
+    res.json({
+      message: "Server Error !"
+    })
+  }
 
 })
 
