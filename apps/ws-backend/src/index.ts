@@ -1,11 +1,15 @@
 
-import { WebSocketServer } from "ws";
+import { WebSocket, WebSocketServer } from "ws";
 import { JWT_SECRET } from "@repo/backend-common/config";
 import jwt, { decode } from 'jsonwebtoken'
 
 const wss = new WebSocketServer ({port: 8080})
-
-const client = new Map()
+ interface Client{
+     ws : WebSocket,
+     room : Map<string, any>,
+     id : string
+ }
+const client = new Map<string, Client>()
 
 wss.on('connection' , (ws , req)=>{
       const token = req.url?.split('token=')[1]
@@ -22,7 +26,7 @@ wss.on('connection' , (ws , req)=>{
         } 
         //@ts-ignore
         const id = decodedtoken.id
-        client.set(id , ws)
+        client.set(id , {id , ws , room : new Map<string, any>()})
 
         ws.send(JSON.stringify({type : 'system' , message : "Welcome to WebsocketServer"}))
 
@@ -32,24 +36,45 @@ wss.on('connection' , (ws , req)=>{
               const parsedMessage = JSON.parse(message.toString());
               console.log('Recieved Message' , message.toString())
              
-              if(parsedMessage.type == "message"){
-              wss.clients.forEach(client => {
-                  if (client != ws && client.readyState === WebSocket.OPEN)
-                    client.send(JSON.stringify({
-                    type : "message",
-                    from : parsedMessage.from, 
+               if(parsedMessage.type == "join"){
+                    const user = [...client.values()].find(c => c.ws === ws)
+                    const roomId = parsedMessage.id
+                    user?.room.set(roomId , parsedMessage)
+               }
+
+               if(parsedMessage.type == "leave"){
+                const user = [...client.values()].find(c => c.ws === ws)
+                if(!user){
+                  return;
+                }
+                 const roomId = parsedMessage.id;
+                  user.room.delete(roomId)
+               }
+
+              if(parsedMessage.type == "chat"){
+                const roomId = parsedMessage.id 
+                  for (const user of client.values()) {
+                  if(user.room.has(roomId) && user.ws !== ws && user.ws.readyState === WebSocket.OPEN)
+                    user.ws.send(JSON.stringify({
+                    type : "chat",
+                    roomId, 
                     content : parsedMessage.content
+                    
                   }))
-                });          
-              }  
-          } catch (error) {
+                }};  
+              
+              } 
+               catch (error) {
              console.error('Invalid JSON' , message)
           } 
-        })
-        ws.on('close',(close) =>{
+          ws.on('close',() =>{
           console.log('Client Disconnected ! ')
           client.delete(id)
         } )
+        })
+          })
+           
+        
       })
-})
+
 
