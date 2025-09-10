@@ -32,27 +32,24 @@ wss.on('connection' , (ws , req)=>{
               const parsedMessage = JSON.parse(message.toString());
               console.log('Recieved Message' , message.toString())
              
-              if(parsedMessage == "message"){
-                const recipients = client.get(parsedMessage.to)
-                if(recipients && recipients.readystate === WebSocket.OPEN){
-                  recipients.send(JSON.stringify({
+              if(parsedMessage.type == "message"){
+              wss.clients.forEach(client => {
+                  if (client != ws && client.readyState === WebSocket.OPEN)
+                    client.send(JSON.stringify({
                     type : "message",
                     from : parsedMessage.from, 
                     content : parsedMessage.content
-                  }));
-                }else {
-                  ws.send(JSON.stringify({type : 'error' , message: "Recipients Not Found"}))
-                }
-              }
-
-               
+                  }))
+                });          
+              }  
           } catch (error) {
              console.error('Invalid JSON' , message)
           } 
         })
+        ws.on('close',(close) =>{
+          console.log('Client Disconnected ! ')
+          client.delete(id)
+        } )
       })
-
-
-
 })
 
