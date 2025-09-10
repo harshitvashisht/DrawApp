@@ -2,14 +2,16 @@
 import { WebSocket, WebSocketServer } from "ws";
 import { JWT_SECRET } from "@repo/backend-common/config";
 import jwt, { decode } from 'jsonwebtoken'
+import { prismaClient } from "@repo/db/client";
 
 const wss = new WebSocketServer ({port: 8080})
  interface Client{
      ws : WebSocket,
-     room : Map<string, any>,
-     id : string
+     rooms : Map<string, any>,
+     userId : string
  }
 const client = new Map<string, Client>()
+let queue : any[] =[]
 
 wss.on('connection' , (ws , req)=>{
       const token = req.url?.split('token=')[1]
@@ -25,8 +27,8 @@ wss.on('connection' , (ws , req)=>{
           return; 
         } 
         //@ts-ignore
-        const id = decodedtoken.id
-        client.set(id , {id , ws , room : new Map<string, any>()})
+        const userId = decodedtoken.id
+        client.set(userId , { userId , ws , rooms : new Map<string, any>()})
 
         ws.send(JSON.stringify({type : 'system' , message : "Welcome to WebsocketServer"}))
 
@@ -38,8 +40,8 @@ wss.on('connection' , (ws , req)=>{
              
                if(parsedMessage.type == "join"){
                     const user = [...client.values()].find(c => c.ws === ws)
-                    const roomId = parsedMessage.id
-                    user?.room.set(roomId , parsedMessage)
+                    const roomId = parsedMessage.roomId
+                    user?.rooms.set(roomId , parsedMessage)
                }
 
                if(parsedMessage.type == "leave"){
@@ -47,19 +49,47 @@ wss.on('connection' , (ws , req)=>{
                 if(!user){
                   return;
                 }
-                 const roomId = parsedMessage.id;
-                  user.room.delete(roomId)
+                 const roomId = parsedMessage.roomId;
+                  user.rooms.delete(roomId)
                }
 
               if(parsedMessage.type == "chat"){
-                const roomId = parsedMessage.id 
+                const roomId = parsedMessage.roomId 
+                queue.push({
+                  content: parsedMessage.content,
+                  userId: userId,
+                  roomId: roomId
+                })
+
+                 setInterval(async ()=>{
+                     if(queue.length === 0) return;
+
+                    const nextMessage = queue.shift()
+
+                    if(!nextMessage) return;
+                      
+                    try {
+                   
+                          await prismaClient.chat.create({
+                             data: {
+                              message : parsedMessage.content, 
+                              userId ,
+                              roomId 
+                             }
+                          })
+
+                    } catch (error) {
+                       console.error('Failed to save message' , error)
+                       queue.unshift(nextMessage)
+                    }
+                 },100);
+
                   for (const user of client.values()) {
-                  if(user.room.has(roomId) && user.ws !== ws && user.ws.readyState === WebSocket.OPEN)
+                  if(user.rooms.has(parsedMessage.roomId) && user.ws !== ws && user.ws.readyState === WebSocket.OPEN)
                     user.ws.send(JSON.stringify({
                     type : "chat",
                     roomId, 
                     content : parsedMessage.content
-                    
                   }))
                 }};  
               
@@ -69,7 +99,7 @@ wss.on('connection' , (ws , req)=>{
           } 
           ws.on('close',() =>{
           console.log('Client Disconnected ! ')
-          client.delete(id)
+          client.delete(userId)
         } )
         })
           })
