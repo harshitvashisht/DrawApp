@@ -122,6 +122,18 @@ app.get('/chats/:roomId' , async(req:Request , res: Response)=>{
           })
 })
 
+app.get('/room/:slug' , async(req:Request , res: Response)=>{
+          
+  const slug = req.params.slug;
+
+    const room = await prismaClient.room.findFirst({where:{
+          slug
+       }
+  })
+          return res.json({
+            room
+          })
+})
 app.listen(3001, () => {
   console.log('Server running at http://localhost:3001')
 })
