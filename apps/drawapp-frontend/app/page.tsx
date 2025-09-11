@@ -2,6 +2,7 @@ import Image from "next/image";
 import Button from "./components/button";
 import Input from "./components/input";
 import AuthPage from "./components/authpage";
+import Chat from "./components/chat";
 
 export default function Home() {
   return <div>
@@ -9,5 +10,6 @@ export default function Home() {
     <Button  label="SignIn"/>
     <Input label="email" Placeholder="Enter You Email " />
     <AuthPage type="signup"/>
+    <Chat />
   </div>
 }

@@ -20,6 +20,9 @@ importers:
 
   apps/drawapp-frontend:
     dependencies:
+      '@repo/backendurls':
+        specifier: workspace:*
+        version: link:../../packages/backendUrls
       lucid:
         specifier: ^2.21.0
         version: 2.21.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -169,6 +172,12 @@ importers:
       dotenv:
         specifier: ^17.2.2
         version: 17.2.2
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+
+  packages/backendUrls:
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
