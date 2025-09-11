@@ -8,6 +8,6 @@ export default function Home() {
     <h1>Hello</h1>
     <Button  label="SignIn"/>
     <Input label="email" Placeholder="Enter You Email " />
-    <AuthPage/>
+    <AuthPage type="signup"/>
   </div>
 }
