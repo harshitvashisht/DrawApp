@@ -5,14 +5,15 @@ import { Socket } from "dgram";
 
 interface ChatProps{
     token : string
+    roomId : number
 }
 
 
-function Chat ({token} : ChatProps){
+function Chat ({token , roomId} : ChatProps){
 
 
         const [messages , setMessages] = useState<string[]>([])
-        const [ws , setWs] = useState(null)
+        const [ws , setWs] = useState<WebSocket | null>(null);
         
         useEffect(() =>{
 
@@ -22,18 +23,25 @@ function Chat ({token} : ChatProps){
             console.log('Websocket Connected')
 
             websocket.onopen = () => {
-                websocket.send(JSON.stringify({type : "welcome" , text : "WELCOME"}))
+                websocket.send(JSON.stringify({type : "join" , roomId}))
             }
             websocket.onmessage = (event) =>{
                   const data = (JSON.parse(event.data))
                   console.log("Recieved" , data)
                   
+                  if(data.type == "chat" && data.message){
+                    setMessages((prev) => [...prev,(data.message)])
+                  }
             }
-        },[])
-        return <div>
-    Hello
+                   setWs(websocket) 
+
+                   return () => websocket.close();
+        },[roomId])
+        return( <div>
     
-</div>
+     <h2> Room : {roomId}  </h2>
+    
+</div>)
 }
 
 
