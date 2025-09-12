@@ -1,6 +1,12 @@
+"use client"
+import axios from "axios";
 import Button from "./button";
 import Heading from "./heading";
 import Input from "./input";
+import cors from  'cors'
+import { useRef } from "react";
+import { httpUrl } from "@repo/backendurls/urls";
+
 
 
 interface AuthPageProps {
@@ -8,6 +14,43 @@ interface AuthPageProps {
 }
 
 export default function AuthPage({type}: AuthPageProps){
+
+    const usernameRef = useRef<HTMLInputElement>(null)
+    const passwordRef = useRef<HTMLInputElement>(null)
+    const emailRef = useRef<HTMLInputElement>(null)
+    const nameRef = useRef<HTMLInputElement>(null)
+
+      async function handleSignUp(){
+           const email = emailRef.current?.value || "";
+           const password = passwordRef.current?.value || "";
+           const name = nameRef.current?.value || "";
+           const username = usernameRef.current?.value || ""
+
+           const response = await axios.post(`${httpUrl}/signup` ,{
+                     email,
+                     password,
+                     name,
+                     username
+           }
+        )
+         alert("User Signed up")   
+       }
+       
+       async function handleSignIn(){
+                
+           const username = usernameRef.current?.value || "";
+           const password = passwordRef.current?.value  || "";
+
+           const response = await axios.post(`${httpUrl}/signin`,{
+                 username,
+                 password
+           })
+           const jwt = response.data.token 
+           localStorage.setItem('token',jwt)
+
+           alert("You Are Signed In !")
+
+       }
 
     if(type == "signin"){
 
@@ -17,13 +60,13 @@ export default function AuthPage({type}: AuthPageProps){
             <h1 className="text-2xl flex justify-center text-white test-bold">
                 <Heading label="SignIn"/>
             </h1> <div className="mt-2">
-            <Input label="Email address " Placeholder="someone@gmail.com"/></div>
+            <Input referannce={usernameRef} label="Username" Placeholder="your username"/></div>
             <div className="mt-2">
-            <Input label="Password " Placeholder="**********" />
+            <Input referannce={passwordRef} label="Password " Placeholder="**********" />
             </div>
            </div>
            <div className="mt-4 flex justify-center ">
-          <Button label="SignIn"/>
+          <Button onclick={handleSignIn} label="SignIn"/>
           </div>
           </div>
        </div>
@@ -33,15 +76,20 @@ export default function AuthPage({type}: AuthPageProps){
             <div>
             <h1 className="text-2xl flex justify-center text-white test-bold">
                 <Heading label="SignUp"/>
-            </h1> <div className="mt-2">
-            <Input label="Email address " Placeholder="someone@gmail.com"/></div>
+            </h1> <div className="">
+            <div className="mt-2">
+            <Input referannce={emailRef} label="Email address " Placeholder="someone@gmail.com"/></div>
             <div className="mt-2 flex flex-row ">
-            <Input label="username" Placeholder="Username"/>
-            <Input label="Password " Placeholder="**********" />
+            <Input referannce={usernameRef} label="Username" Placeholder="Username"/>
+            <Input referannce={passwordRef} label="Password " Placeholder="**********" />
+            </div>
+            <div>
+                <Input referannce={nameRef} label="Name" Placeholder="Your name"/>
+            </div>
             </div>
            </div>
            <div className="mt-4 flex justify-center ">
-          <Button label="SignIn"/>
+          <Button onclick={handleSignUp} label="SignUp"/>
           </div>
           </div>
        </div>

@@ -2,11 +2,14 @@ import express ,{json, Request , Response} from 'express'
 import { prismaClient } from '@repo/db/client'
 import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken"
+import cors from 'cors'
 import { JWT_SECRET } from '@repo/backend-common/config'
 import {CreateUserSchema, CreateSigninSchema, CreateRoomSchema} from "@repo/common/types"
 import authMiddleware from './middleware'
 const app = express()
+
 app.use(express.json())
+app.use(cors())
 
 app.post('/signup' , async function (req:Request , res : Response) {
      
@@ -134,6 +137,25 @@ app.get('/room/:slug' , async(req:Request , res: Response)=>{
             room
           })
 })
+
+
+app.get('/getrooms' ,async(req:Request , res: Response)=>{
+
+  try {
+    const rooms = await prismaClient.room.findMany()
+
+    res.json ({
+      rooms
+    })
+
+  } catch (error) {
+    console.error("Database Connection Failed !")
+  }
+         
+})
+
 app.listen(3001, () => {
   console.log('Server running at http://localhost:3001')
 })
+
+

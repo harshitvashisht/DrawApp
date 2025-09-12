@@ -3,33 +3,36 @@ import React,{useState , useEffect} from "react";
 import {wsUrl }from '@repo/backendurls/urls'
 import { Socket } from "dgram";
 
-
-interface ChatProps {
-    type : string, 
-    roomId : Number, 
-
+interface ChatProps{
+    token : string
 }
-function Chat (){
+
+
+function Chat ({token} : ChatProps){
+
+
         const [messages , setMessages] = useState<string[]>([])
         const [ws , setWs] = useState(null)
-
+        
         useEffect(() =>{
-            const websocket = new WebSocket(`${wsUrl}`)
+
+            const websocket = new WebSocket(`${wsUrl}?token=${token}`);
+
+          
+            console.log('Websocket Connected')
 
             websocket.onopen = () => {
-                console.log('Websocket Connected')
-
-                websocket.send(JSON.stringify({type : "join" , roomId : 4}))
+                websocket.send(JSON.stringify({type : "welcome" , text : "WELCOME"}))
             }
             websocket.onmessage = (event) =>{
-                  const message = (JSON.parse(event.data))
-                  console.log("Recieved" , message)
-                  setMessages((prev) => [...prev , message])
+                  const data = (JSON.parse(event.data))
+                  console.log("Recieved" , data)
+                  
             }
         },[])
         return <div>
     Hello
-    {messages}
+    
 </div>
 }
 
