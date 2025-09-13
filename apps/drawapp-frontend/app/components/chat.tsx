@@ -23,9 +23,6 @@ function Chat ({token  , roomId} :  {token : string ; roomId : number} ){
         const [input , setInput] = useState('')
         
 
-        const decoded = jwtDecode<TokenPayload>(token);
-        const userId = decoded.id;
-
         useEffect(() =>{
 
             const websocket = new WebSocket(`${wsUrl}?token=${token}`);
@@ -41,27 +38,24 @@ function Chat ({token  , roomId} :  {token : string ; roomId : number} ){
                   console.log("Recieved" , data)
                   
                   if(data.type == "chat" && data.message){
-                    setMessages((prev) => [...prev ,{
-               content: data.message.content,
-               sender: data.message.sender.username,
-               type: data.message.sender.id === userId ? "send" : "received",       
-             }])
+                    setMessages((prev) => [...prev , data.message])
                   }
             }
                    setWs(websocket) 
-        },[token , roomId])
+        },[])
       
         function handleSendMessage(){
              if(!ws || ws.readyState != WebSocket.OPEN) return ; 
              ws.send(JSON.stringify({type : "chat" ,roomId : roomId, content : input}))
              setInput("")
  
-        }
-           
+        }  
+
+        console.log(messages)
         return( <div>
     
      <h2> Room : {roomId}  </h2>
-   
+
         {messages.map((message, index) => (
           <div
             key={index}
