@@ -5,13 +5,11 @@ import { Socket } from "dgram";
 import { jwtDecode } from "jwt-decode";
 
 
-interface TokenPayload {
-  id: number;
-}
+
 
 interface Message{
     content: string;
-    sender: string;
+    sender?: string;
     type: "send" | "received";
 }
 
@@ -26,8 +24,6 @@ function Chat ({token  , roomId} :  {token : string ; roomId : number} ){
         useEffect(() =>{
 
             const websocket = new WebSocket(`${wsUrl}?token=${token}`);
-
-          
             console.log('Websocket Connected')
 
             websocket.onopen = () => {
@@ -35,19 +31,21 @@ function Chat ({token  , roomId} :  {token : string ; roomId : number} ){
             }
             websocket.onmessage = (event) =>{
                   const data = (JSON.parse(event.data))
-                  console.log("Recieved" , data)
-                  
-                  if(data.type == "chat" && data.message){
-                    setMessages((prev) => [...prev , data.message])
-                  }
-            }
-                   setWs(websocket) 
-        },[])
+                   console.log("Recieved" , data)
+                  if(data.type === "chat" && data.content){
+                  setMessages((prev) => [...prev, {type : "received" , content: data.content }]);
+                  } 
+            }   
+                    setWs(websocket)     
+        },[roomId])
+ 
       
         function handleSendMessage(){
              if(!ws || ws.readyState != WebSocket.OPEN) return ; 
              ws.send(JSON.stringify({type : "chat" ,roomId : roomId, content : input}))
-             setInput("")
+             setMessages((prev) => [...prev, {type : "send" , content: input }]);
+             setInput("");
+    
  
         }  
 
@@ -59,14 +57,14 @@ function Chat ({token  , roomId} :  {token : string ; roomId : number} ){
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`max-w-[60%] p-2 rounded-lg shadow ${
+            className={`max-w-[60%] p-2 w-fit rounded-lg shadow  ${
               message.type === "send"
                 ? "ml-auto bg-green-200 text-right"
-                : "mr-auto bg-white text-left"
+                : "mr-auto bg-red-200 text-white text-left"
             }`}
           >
             <div>
-                <strong>{message.sender}</strong>: {message.content}
+               {message.content}
             </div>
           </div>
         ))}

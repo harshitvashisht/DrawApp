@@ -21,8 +21,6 @@ export default function DrawInit(canvas : HTMLCanvasElement){
             }) 
             canvas.addEventListener('mouseup' ,(e) =>{
                 clicked = false
-                console.log(e.clientX)
-                console.log(e.clientY)
             } )
             canvas.addEventListener('mousemove' , (e) => {
                 if(clicked)  {
