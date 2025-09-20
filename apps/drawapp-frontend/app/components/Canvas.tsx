@@ -3,10 +3,13 @@
 import DrawInit from "@/draw"
 import { useRef, useEffect } from "react"
 
+type CanvasProps = {
+  roomId: string
+  mode: "rect" | "circle" | "line"
+}
 
 
-
-function  Canvas ({roomId} : {roomId : string})  {
+function  Canvas ({ roomId, mode }: CanvasProps)  {
 
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -14,12 +17,12 @@ function  Canvas ({roomId} : {roomId : string})  {
          
         if(canvasRef.current){
 
-            DrawInit(canvasRef.current , roomId)
+            DrawInit(canvasRef.current , roomId , mode)
             
         }
                           
 
-    } , [canvasRef])
+    } , [canvasRef , mode])
 
 
     return <div >

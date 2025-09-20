@@ -1,17 +1,61 @@
-
+"use client"
 import Canvas from "@/app/components/Canvas"
 import DrawInit from "@/draw"
+import axios from "axios"
+import { useEffect, useState } from "react"
 
 
 
-export default async function CanvasPage({params}:{
+export default function CanvasPage({params}:{
     params : {
         roomId : string
+    } 
+ },
+){
+const { roomId } = params
+  const [mode, setMode] = useState<"rect" | "circle" | "line">('circle') 
+  const [shapes, setShapes] = useState([])
+
+  useEffect(() => {
+    async function fetchShapes() {
+      const res = await axios.get(`http://localhost:3001/chats/${roomId}`)
+      const msgs = res.data.messages
+      const shapesData = msgs.map((x: { message: string }) => JSON.parse(x.message))
+      setShapes(shapesData)
     }
-}){
-const roomId = (await params).roomId
+    fetchShapes()
+  }, [roomId])
 
 console.log(roomId)
-return <Canvas roomId={roomId}/>
+return (
+    <div>
+    <div className="flex space-x-2">
+        <button
+          className={`px-4 py-2 rounded ${
+            mode === "rect" ? "bg-blue-600 text-white" : "bg-gray-200"
+          }`}
+          onClick={() => setMode("rect")}
+        >
+          Rectangle
+        </button>
+        <button
+          className={`px-4 py-2 rounded ${
+            mode === "circle" ? "bg-blue-600 text-white" : "bg-gray-200"
+          }`}
+          onClick={() => setMode("circle")}
+        >
+          Circle
+        </button>
+        <button className={`px-4 py-2 rounded ${
+            mode === "line" ? "bg-blue-600 text-white" : "bg-gray-200"
+          }` } 
+          onClick={() => setMode('line')}>
+            Line
+        </button>
+      </div>
+      <Canvas roomId={roomId} mode={mode} />
+      </div>
+)
+
    
 }
