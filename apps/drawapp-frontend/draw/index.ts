@@ -22,8 +22,8 @@ type Shape = {
 }
 
 
-export default async function DrawInit(canvas : HTMLCanvasElement , roomId:string , mode :  'rect' | 'circle' |'line' ){
- 
+export default async function DrawInit(canvas : HTMLCanvasElement , roomId:string , modeRef :  React.RefObject<"rect" | "circle" | "line"> ){
+  
     const ctx = canvas.getContext("2d")
 
     let existingShapes : Shape[] = await getShapes(roomId)
@@ -47,6 +47,9 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
             canvas.addEventListener('mouseup' ,(e) =>{
                 if(!clicked) return;
                 clicked = false
+
+                const mode = modeRef.current
+
                 if (mode == 'rect'){
 
                  const width = e.offsetX - startX
@@ -82,6 +85,10 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
 
             canvas.addEventListener('mousemove' , (e) => {
                 if(clicked)  {
+
+                    const mode = modeRef.current
+
+
                     if(mode == 'rect'){
                          const width = e.offsetX - startX
                          const height = e.offsetY - startY  
@@ -89,6 +96,8 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                          ctx.strokeStyle = "rgba(255,255,255)"
                          ctx.strokeRect(startX , startY ,width , height)
                     } 
+
+
                     else if(mode == 'circle'){
                      const radius = Math.sqrt(
                       Math.pow(e.offsetX - startX, 2) + Math.pow(e.offsetY - startY, 2))
@@ -97,14 +106,15 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                       ctx.beginPath();
                       ctx.arc(startX, startY, radius, 0, Math.PI * 2);
                       ctx.stroke();
-                    } else if(mode == 'line'){
-                        ctx.strokeStyle = "rgba(255,255,255)"  
-                        ctx.beginPath()
-                        ctx.moveTo(startX , startY);
-                        clearCanvas(existingShapes ,canvas , ctx )  
-                        ctx.lineTo(e.offsetX , e.offsetY);
-                        ctx.stroke()
-
+                    } 
+                    
+                    else if(mode == 'line'){
+                         clearCanvas(existingShapes, canvas, ctx)  
+                         ctx.strokeStyle = "rgba(255,255,255)"
+                         ctx.beginPath()
+                         ctx.moveTo(startX, startY)                                        
+                         ctx.lineTo(e.offsetX, e.offsetY)
+                         ctx.stroke()
                     }
                 }
             } )

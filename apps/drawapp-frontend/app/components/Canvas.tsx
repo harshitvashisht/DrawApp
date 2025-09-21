@@ -12,18 +12,18 @@ type CanvasProps = {
 function  Canvas ({ roomId, mode }: CanvasProps)  {
 
     const canvasRef = useRef<HTMLCanvasElement>(null)
+    const modeRef = useRef<"rect" | "circle" | "line">("rect")
 
     useEffect(() => {
          
         if(canvasRef.current){
-
-            DrawInit(canvasRef.current , roomId , mode)
-            
+            DrawInit(canvasRef.current , roomId , modeRef)  
         }
-                          
-
-    } , [canvasRef , mode])
-
+    } , [canvasRef])
+       
+    useEffect(() => {
+    modeRef.current = mode
+  }, [mode])
 
     return <div >
         <canvas className="" ref={canvasRef} width={1080} height={1000} ></canvas>
