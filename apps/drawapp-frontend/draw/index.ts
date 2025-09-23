@@ -19,10 +19,21 @@ type Shape = {
     endX : number;
     endY : number
 
+} | {
+    type : 'text';
+    x : number;
+    y : number; 
+    value : string
+} | {
+    type : 'arrow'; 
+    startX : number;
+    startY : number;
+    endX : number; 
+    endY : number; 
 }
 
 
-export default async function DrawInit(canvas : HTMLCanvasElement , roomId:string , modeRef :  React.RefObject<"rect" | "circle" | "line"> ){
+export default async function DrawInit(canvas : HTMLCanvasElement , roomId:string , modeRef :  React.RefObject<"rect" | "circle" | "line" | "text" | "arrow"> ){
   
     const ctx = canvas.getContext("2d")
 
@@ -79,6 +90,27 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                         endX : e.offsetX,
                         endY : e.offsetY
                      })
+                } else if(mode == 'text'){
+                  
+                   createTextInput(e.offsetX , e.offsetY , (inputValue) => {
+                       if(inputValue.trim() != ""){
+                        existingShapes.push({
+                            type: "text",
+                            x: e.offsetX, 
+                            y : e.offsetY,
+                            value : inputValue
+                        })
+                        clearCanvas(existingShapes, canvas, ctx);
+                       }
+                   })
+                } else if(mode == 'arrow'){
+                    existingShapes.push({
+                        type : 'arrow',
+                        startX,
+                        startY,
+                        endX : e.offsetX,
+                        endY : e.offsetY
+                    })
                 }
                  clearCanvas(existingShapes, canvas, ctx);
             })
@@ -88,7 +120,6 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
 
                     const mode = modeRef.current
 
-
                     if(mode == 'rect'){
                          const width = e.offsetX - startX
                          const height = e.offsetY - startY  
@@ -96,7 +127,6 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                          ctx.strokeStyle = "rgba(255,255,255)"
                          ctx.strokeRect(startX , startY ,width , height)
                     } 
-
 
                     else if(mode == 'circle'){
                      const radius = Math.sqrt(
@@ -106,8 +136,7 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                       ctx.beginPath();
                       ctx.arc(startX, startY, radius, 0, Math.PI * 2);
                       ctx.stroke();
-                    } 
-                    
+                    }                     
                     else if(mode == 'line'){
                          clearCanvas(existingShapes, canvas, ctx)  
                          ctx.strokeStyle = "rgba(255,255,255)"
@@ -116,9 +145,32 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                          ctx.lineTo(e.offsetX, e.offsetY)
                          ctx.stroke()
                     }
-                }
+                    else if(mode == 'arrow')  {
+                        clearCanvas(existingShapes, canvas, ctx);  
+                        ctx.strokeStyle = "rgba(255,255,255)";
+                    ctx.beginPath();
+                        ctx.moveTo(startX, startY);
+                        ctx.lineTo(e.offsetX, e.offsetY);
+                        ctx.stroke();
+                        const headLength = 10;
+                        const angle = Math.atan2(e.offsetY - startY, e.offsetX - startX);
+                        ctx.beginPath();
+                        ctx.moveTo(e.offsetX, e.offsetY);
+                        ctx.lineTo(
+                            e.offsetX - headLength * Math.cos(angle - Math.PI / 6),
+                            e.offsetY - headLength * Math.sin(angle - Math.PI / 6)
+                        );
+                        ctx.lineTo(
+                            e.offsetX - headLength * Math.cos(angle + Math.PI / 6),
+                            e.offsetY - headLength * Math.sin(angle + Math.PI / 6)
+    );
+                        ctx.lineTo(e.offsetX, e.offsetY);
+                        ctx.fillStyle = ctx.strokeStyle;
+                        ctx.fill();
+                                        }                  
+                                    }
             } )
-}
+                    }
 
 function clearCanvas(existingShapes: Shape[], canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -126,20 +178,50 @@ function clearCanvas(existingShapes: Shape[], canvas: HTMLCanvasElement, ctx: Ca
   ctx.fillRect(0, 0, canvas.width, canvas.height) 
 
   existingShapes.forEach((shape) => {
-    ctx.strokeStyle = "rgba(255,255,255)"
-    if (shape.type === "rect") {
-      ctx.strokeRect(shape.x, shape.y, shape.width, shape.height)
-    } else if (shape.type === "circle") {
-      ctx.beginPath()
-      ctx.arc(shape.centerX, shape.centerY, shape.radius, 0, Math.PI * 2)
-      ctx.stroke()
-    }else if (shape.type === "line") {
-    ctx.beginPath();
-    ctx.moveTo(shape.startX, shape.startY);
-    ctx.lineTo(shape.endX, shape.endY);
-    ctx.stroke();
-  }
-  })
+
+            ctx.strokeStyle = "rgba(255,255,255)"
+            if (shape.type === "rect") {
+              ctx.strokeRect(shape.x, shape.y, shape.width, shape.height)
+            } else if (shape.type === "circle") {
+              ctx.beginPath()
+            ctx.arc(shape.centerX, shape.centerY, shape.radius, 0, Math.PI * 2)
+              ctx.stroke()
+            }else if (shape.type === "line") {
+            ctx.beginPath();
+            ctx.moveTo(shape.startX, shape.startY);
+            ctx.lineTo(shape.endX, shape.endY);
+            ctx.stroke();
+            } else if(shape.type === "text"){
+                ctx.fillStyle = 'white';
+                ctx.font = '20px Arial';
+                ctx.fillText(shape.value , shape.x , shape.y)
+            } else if(shape.type === 'arrow'){
+                   const { startX, startY, endX, endY } = shape;
+                   const headLength = 10; 
+                   const angle = Math.atan2(endY - startY, endX - startX);
+
+                   ctx.beginPath();
+                   ctx.moveTo(startX, startY);
+                   ctx.lineTo(endX, endY);
+                   ctx.stroke();
+               
+
+                   ctx.beginPath();
+                   ctx.moveTo(endX, endY);
+                   ctx.lineTo(
+                       endX - headLength * Math.cos(angle - Math.PI / 6),
+                       endY - headLength * Math.sin(angle - Math.PI / 6)
+                   );
+                   ctx.lineTo(
+                       endX - headLength * Math.cos(angle + Math.PI / 6),
+                       endY - headLength * Math.sin(angle + Math.PI / 6)
+                   );
+                   ctx.lineTo(endX, endY);
+                   ctx.fillStyle = ctx.strokeStyle;
+                   ctx.fill();               
+                             
+                                         }
+                         })
 }
 async function getShapes(roomId:string){
 
@@ -151,4 +233,49 @@ async function getShapes(roomId:string){
         return messageData
     })
     return shapes
+}
+
+function createTextInput(
+  x: number,
+  y: number,
+  onDone: (value: string) => void
+) {
+  const textarea = document.createElement("textarea");
+
+  textarea.style.position = "absolute";
+  textarea.style.left = x + "px";
+  textarea.style.top = y + "px";
+  textarea.style.font = "20px Arial";
+  textarea.style.border = "none";
+  textarea.style.outline = "none";
+  textarea.style.background = "transparent";
+  textarea.style.color = "white";      
+  textarea.style.zIndex = "1000";
+  textarea.style.caretColor = "white";
+  textarea.style.resize = "none";      
+  textarea.rows = 1;
+  textarea.style.lineHeight = "24px";
+
+  document.body.appendChild(textarea);
+  textarea.focus();
+
+  let finished = false;
+
+  function finish() {
+    if (finished) return;
+    finished = true;
+    onDone(textarea.value);
+    document.body.removeChild(textarea);
+  }
+
+  textarea.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault(); 
+      finish();
+    }
+  });
+
+  textarea.addEventListener("blur", () =>{
+    if(!finished) finish ()
+  });
 }

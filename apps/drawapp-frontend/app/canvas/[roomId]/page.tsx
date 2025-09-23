@@ -13,7 +13,7 @@ export default function CanvasPage({params}:{
  },
 ){
 const { roomId } = params
-  const [mode, setMode] = useState<"rect" | "circle" | "line">('circle') 
+  const [mode, setMode] = useState<"rect" | "circle" | "line" | "text" | "arrow">('circle') 
   const [shapes, setShapes] = useState([])
 
   useEffect(() => {
@@ -51,6 +51,18 @@ return (
           }` } 
           onClick={() => setMode('line')}>
             <svg data-name="Layer 1" height="32" width="32"  fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M15.5 7.5v1H.5v-1z" className="fill-rule:evenodd"/></svg>
+        </button>
+         <button className={`px-4 py-2 rounded ${
+            mode === "line" ? "bg-blue-600 text-white" : "bg-gray-200"
+          }` } 
+          onClick={() => setMode('text')}>
+            Text
+        </button>
+        <button className={`px-4 py-2 rounded  ${
+            mode === "line" ? "bg-blue-600 text-white" : "bg-gray-200"
+          }` } 
+          onClick={() => setMode('arrow')} >
+            Arrow
         </button>
       </div>
       <Canvas roomId={roomId} mode={mode} />
