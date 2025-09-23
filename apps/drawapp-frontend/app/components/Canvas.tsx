@@ -1,35 +1,37 @@
-"use client"
-
 import DrawInit from "@/draw"
+import { Socket } from "dgram"
 import { useRef, useEffect, useState } from "react"
+
 
 type CanvasProps = {
   roomId: string
-  mode: "rect" | "circle" | "line" | "text" | "arrow"
+  mode : "rect" | "circle" | "line" | "text" | "arrow"
+  socket : WebSocket
 }
 
 
-function  Canvas ({ roomId, mode }: CanvasProps)  {
+export default function Canvas({ roomId, mode  ,socket }: CanvasProps){
 
-    const canvasRef = useRef<HTMLCanvasElement>(null)
-    const modeRef = useRef<"rect" | "circle" | "line" | "text" | "arrow">("rect")
+        const canvasRef = useRef<HTMLCanvasElement>(null)
+        const modeRef = useRef<"rect" | "circle" | "line" | "text" | "arrow">("rect")
+        
+        
+        useEffect(() => {
+             
+            if(canvasRef.current && socket){
+                DrawInit(canvasRef.current , roomId , socket, modeRef )  
+            }
+        } , [socket , roomId])
 
-    useEffect(() => {
-         
-        if(canvasRef.current){
-            DrawInit(canvasRef.current , roomId , modeRef)  
-        }
-    } , [canvasRef])
-       
-    useEffect(() => {
-    modeRef.current = mode
-  }, [mode])
+            useEffect(() => {
 
+              modeRef.current = mode
+              
+           }, [mode])
+ 
 
-
-    return <div >
-        <canvas className="cursor-crosshair" ref={canvasRef} width={1080} height={1000} ></canvas>
+        return <div>
+             <canvas className="cursor-crosshair" ref={canvasRef} width={1080} height={1000} ></canvas>
     </div>
+     
 }
-
-export default Canvas

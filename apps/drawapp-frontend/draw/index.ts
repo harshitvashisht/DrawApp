@@ -1,5 +1,6 @@
 import axios from "axios";
 import { HtmlContext } from "next/dist/server/route-modules/pages/vendored/contexts/entrypoints";
+import { json } from "stream/consumers";
 
 type Shape = {
     type : "rect";
@@ -33,13 +34,23 @@ type Shape = {
 }
 
 
-export default async function DrawInit(canvas : HTMLCanvasElement , roomId:string , modeRef :  React.RefObject<"rect" | "circle" | "line" | "text" | "arrow"> ){
+export default async function DrawInit(canvas : HTMLCanvasElement , roomId:string ,socket : WebSocket , modeRef :  React.RefObject<"rect" | "circle" | "line" | "text" | "arrow"> ){
   
     const ctx = canvas.getContext("2d")
 
     let existingShapes : Shape[] = await getShapes(roomId)
 
            if(!ctx) return ;
+
+           socket.onmessage = (message) =>{
+            const parsedMessage = JSON.parse(message.data)
+
+            if(parsedMessage.type === "chat") {
+                const parsedShape = JSON.parse(parsedMessage.message)
+                existingShapes.push(parsedShape)
+                clearCanvas(existingShapes ,canvas,ctx)
+            }
+           }
 
            clearCanvas(existingShapes ,canvas,ctx)
 
@@ -66,13 +77,23 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                  const width = e.offsetX - startX
                  const height = e.offsetY - startY
 
-                 existingShapes.push({
+               const rectShape : Shape = {
                     type : "rect",
                     x : startX,
                     y : startY,
                     height, 
                     width
-                 })
+                 }
+                 existingShapes.push(rectShape)
+
+                 socket.send(JSON.stringify({
+                    type : "chat",
+                    content : JSON.stringify({
+                        rectShape
+                    }),
+                    roomId
+                 }))
+                 
                 }else if(mode == 'circle'){
                     const radius = Math.sqrt(Math.pow(e.offsetX - startX, 2) + Math.pow(e.offsetY - startY, 2));
 
