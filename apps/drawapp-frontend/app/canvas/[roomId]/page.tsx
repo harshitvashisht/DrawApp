@@ -15,7 +15,7 @@ export default function CanvasPage({params}:{
 const { roomId } = params
 
   const [shapes, setShapes] = useState([])
-
+  const [renderLogs , setRenderLogs] = useState([])
   useEffect(() => {
     async function fetchShapes() {
       const res = await axios.get(`http://localhost:3001/chats/${roomId}`)
@@ -27,6 +27,12 @@ const { roomId } = params
   }, [roomId])
 
 console.log(roomId)
+
+useEffect(() => {
+       const timestamp = new Date().toISOString();
+       
+})
+
 return (
     <div>
     
