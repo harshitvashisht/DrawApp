@@ -15,15 +15,19 @@ export default function  RoomCanvas ({ roomId  }: CanvasProps){
     const [mode , setMode] = useState<"rect" | "circle" | "line" | "text" | "arrow">('circle') 
 
     useEffect(() =>{
-        const ws = new WebSocket(`ws://localhost:8080?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZmYTdiNjg2LWI5ZmEtNDI1Yi05MjNiLTEzOTRhYmNhODliZCIsImlhdCI6MTc1ODY2ODk4MSwiZXhwIjoxNzU4NjcyNTgxfQ.nr35vkjDuBtHK7QTElDTUy7T7iol0Hw-MmRX13YI5LU`)
-
+        const ws = new WebSocket(`ws://localhost:8080?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIxODMxMGFkLTc5OGUtNDI5Ni05NWVlLTk2ZjAxN2YwYmE5OSIsImlhdCI6MTc1ODY3NzQyMCwiZXhwIjoxNzU4NjgxMDIwfQ.VRRL6J9HWCKECd2ttmm0ScZ4XtKEXB-_IeoOBEaiYIM`)
+         const numRoomId = Number(roomId)
         ws.onopen = () => {
             setSocket(ws)
 
-            ws.send(JSON.stringify({
-                type : "join",
-                roomId
-            }))
+            if(isNaN(numRoomId)){
+                      console.error('roomId is not valid' ,roomId)
+                    }else{
+                        ws.send(JSON.stringify({
+                            type : "join",
+                            roomId : numRoomId
+                        }))
+                    }
         }
     },[roomId])
 

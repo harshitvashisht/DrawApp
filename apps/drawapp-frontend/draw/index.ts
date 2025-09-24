@@ -71,40 +71,30 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                 clicked = false
 
                 const mode = modeRef.current
-
+                let newShape: Shape | null = null;
                 if (mode == 'rect'){
 
                  const width = e.offsetX - startX
                  const height = e.offsetY - startY
 
-               const rectShape : Shape = {
+               newShape = {
                     type : "rect",
                     x : startX,
                     y : startY,
                     height, 
                     width
-                 }
-                 existingShapes.push(rectShape)
-
-                 socket.send(JSON.stringify({
-                    type : "chat",
-                    content : JSON.stringify({
-                        rectShape
-                    }),
-                    roomId
-                 }))
-                 
+                 }   
                 }else if(mode == 'circle'){
                     const radius = Math.sqrt(Math.pow(e.offsetX - startX, 2) + Math.pow(e.offsetY - startY, 2));
 
-                    existingShapes.push({
+                  newShape=({
                         type : 'circle',
                         centerX : startX, 
                         centerY : startY,
                         radius  
                     })
                 } else if(mode == 'line'){
-                     existingShapes.push({
+                    newShape = ({
                         type : 'line',
                         startX,
                         startY,
@@ -115,7 +105,7 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                   
                    createTextInput(e.offsetX , e.offsetY , (inputValue) => {
                        if(inputValue.trim() != ""){
-                        existingShapes.push({
+                        newShape = ({
                             type: "text",
                             x: e.offsetX, 
                             y : e.offsetY,
@@ -125,13 +115,26 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                        }
                    })
                 } else if(mode == 'arrow'){
-                    existingShapes.push({
+                    newShape = ({
                         type : 'arrow',
                         startX,
                         startY,
                         endX : e.offsetX,
                         endY : e.offsetY
                     })
+                } if(newShape && socket && socket.readyState === WebSocket.OPEN  ){
+                    existingShapes.push(newShape)
+                    const numRoomId = Number(roomId)
+                  
+                    if(isNaN(numRoomId)){
+                      console.error('roomId is not valid' ,roomId)
+                    }else{
+                      socket.send(JSON.stringify({
+                        type:"chat",
+                        roomId : numRoomId,
+                        content : JSON.stringify(newShape)
+                      }))
+                    }
                 }
                  clearCanvas(existingShapes, canvas, ctx);
             })

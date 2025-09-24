@@ -27,7 +27,7 @@ export default function Rooms (){
                     {room.slug}</li>
             ))}
           </ul>
-          {selectedRoom && <Chat token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZmYTdiNjg2LWI5ZmEtNDI1Yi05MjNiLTEzOTRhYmNhODliZCIsImlhdCI6MTc1ODY2ODk4MSwiZXhwIjoxNzU4NjcyNTgxfQ.nr35vkjDuBtHK7QTElDTUy7T7iol0Hw-MmRX13YI5LU" roomId={selectedRoom}/>}
+          {selectedRoom && <Chat token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZmYTdiNjg2LWI5ZmEtNDI1Yi05MjNiLTEzOTRhYmNhODliZCIsImlhdCI6MTc1ODY3MzM2OCwiZXhwIjoxNzU4Njc2OTY4fQ.Oc9lPymCGJF-JWhZ6LTfbjYBlBkca6PcjY9ta8ruAY4" roomId={selectedRoom}/>}
          
     </div>
 
