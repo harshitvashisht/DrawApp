@@ -5,7 +5,7 @@ import { useRef, useEffect, useState } from "react"
 
 type CanvasProps = {
   roomId: string
-  mode : "rect" | "circle" | "line" | "text" | "arrow"
+  mode : "rect" | "circle" | "line" | "text" | "arrow" | "freehand"
   socket : WebSocket
 }
 
@@ -13,7 +13,7 @@ type CanvasProps = {
 export default function Canvas({ roomId, mode  ,socket }: CanvasProps){
 
         const canvasRef = useRef<HTMLCanvasElement>(null)
-        const modeRef = useRef<"rect" | "circle" | "line" | "text" | "arrow">("rect")
+        const modeRef = useRef<"rect" | "circle" | "line" | "text" | "arrow" | "freehand">("rect")
         
         
         useEffect(() => {

@@ -29,13 +29,12 @@ const { roomId } = params
 console.log(roomId)
 
 useEffect(() => {
-       const timestamp = new Date().toISOString();
+
        
 })
 
 return (
     <div>
-    
       < RoomCanvas roomId={roomId}  />
       </div>
 )

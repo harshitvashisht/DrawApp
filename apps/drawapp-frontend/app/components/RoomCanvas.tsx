@@ -12,10 +12,10 @@ type CanvasProps = {
 export default function  RoomCanvas ({ roomId  }: CanvasProps){
 
     const [socket , setSocket] = useState<WebSocket | null>(null)
-    const [mode , setMode] = useState<"rect" | "circle" | "line" | "text" | "arrow">('circle') 
+    const [mode , setMode] = useState<"rect" | "circle" | "line" | "text" | "arrow" | "freehand">('circle') 
 
     useEffect(() =>{
-        const ws = new WebSocket(`ws://localhost:8080?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIxODMxMGFkLTc5OGUtNDI5Ni05NWVlLTk2ZjAxN2YwYmE5OSIsImlhdCI6MTc1ODY3NzQyMCwiZXhwIjoxNzU4NjgxMDIwfQ.VRRL6J9HWCKECd2ttmm0ScZ4XtKEXB-_IeoOBEaiYIM`)
+        const ws = new WebSocket(`ws://localhost:8080?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZmYTdiNjg2LWI5ZmEtNDI1Yi05MjNiLTEzOTRhYmNhODliZCIsImlhdCI6MTc1ODcwODYyOSwiZXhwIjoxNzU4NzEyMjI5fQ.zmdlSFb-EbN7YevGF2Dl7TPC1xLzsa_xLDyPO-0hG9U`)
          const numRoomId = Number(roomId)
         ws.onopen = () => {
             setSocket(ws)
@@ -63,16 +63,22 @@ export default function  RoomCanvas ({ roomId  }: CanvasProps){
             <svg data-name="Layer 1" height="32" width="32"  fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M15.5 7.5v1H.5v-1z" className="fill-rule:evenodd"/></svg>
         </button>
          <button className={`px-4 py-2 rounded ${
-            mode === "line" ? "bg-blue-600 text-white" : "bg-gray-200"
+            mode === "text" ? "bg-blue-600 text-white" : "bg-gray-200"
           }` } 
           onClick={() => setMode('text')}>
             Text
         </button>
         <button className={`px-4 py-2 rounded  ${
-            mode === "line" ? "bg-blue-600 text-white" : "bg-gray-200"
+            mode === "arrow" ? "bg-blue-600 text-white" : "bg-gray-200"
           }` } 
           onClick={() => setMode('arrow')} >
             Arrow
+        </button>
+        <button className={`px-4 py-2 rounded  ${
+            mode === "freehand" ? "bg-blue-600 text-white" : "bg-gray-200"
+          }` } 
+          onClick={() => setMode('freehand')} >
+            Pencil
         </button>
       </div>
            <Canvas roomId={roomId} mode={mode} socket={socket} />

@@ -31,10 +31,13 @@ type Shape = {
     startY : number;
     endX : number; 
     endY : number; 
+} | {
+    type : 'freehand';
+    points : { x : number , y : number} [];
 }
 
 
-export default async function DrawInit(canvas : HTMLCanvasElement , roomId:string ,socket : WebSocket , modeRef :  React.RefObject<"rect" | "circle" | "line" | "text" | "arrow"> ){
+export default async function DrawInit(canvas : HTMLCanvasElement , roomId:string ,socket : WebSocket , modeRef :  React.RefObject<"rect" | "circle" | "line" | "text" | "arrow" | "freehand"> ){
   
     const ctx = canvas.getContext("2d")
 
@@ -60,11 +63,18 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
             let clicked = false
             let startX = 0 ;
             let startY = 0 ;
+
+            let currentFreehand :{ type: "freehand"; points: { x: number, y: number }[] } | null = null
             
             canvas.addEventListener('mousedown' , (e) => {
                 clicked = true
                startX = e.offsetX
                startY = e.offsetY
+
+               if (modeRef.current === 'freehand') {
+        currentFreehand = { type: 'freehand', points: [{ x: startX, y: startY }] };
+        existingShapes.push(currentFreehand); 
+    }
             }) 
             canvas.addEventListener('mouseup' ,(e) =>{
                 if(!clicked) return;
@@ -114,7 +124,11 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                         clearCanvas(existingShapes, canvas, ctx);
                        }
                    })
-                } else if(mode == 'arrow'){
+                }else if(mode == 'freehand' && currentFreehand){
+                      newShape = currentFreehand;
+                      currentFreehand = null; 
+                }
+                else if(mode == 'arrow'){
                     newShape = ({
                         type : 'arrow',
                         startX,
@@ -138,11 +152,12 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                 }
                  clearCanvas(existingShapes, canvas, ctx);
             })
-
+           
             canvas.addEventListener('mousemove' , (e) => {
                 if(clicked)  {
 
                     const mode = modeRef.current
+                    
 
                     if(mode == 'rect'){
                          const width = e.offsetX - startX
@@ -168,7 +183,17 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                          ctx.moveTo(startX, startY)                                        
                          ctx.lineTo(e.offsetX, e.offsetY)
                          ctx.stroke()
-                    }
+                    } else if(mode == 'freehand' && currentFreehand){
+                      currentFreehand.points.push({ x: e.offsetX, y: e.offsetY });
+
+                       clearCanvas(existingShapes, canvas, ctx);
+                       ctx.beginPath();
+                       ctx.strokeStyle = "white";
+                       ctx.moveTo(currentFreehand.points[0].x, currentFreehand.points[0].y);
+                   
+                       currentFreehand.points.forEach((p: { x: number; y: number; }) => ctx.lineTo(p.x, p.y));
+                       ctx.stroke();                   
+                         }
                     else if(mode == 'arrow')  {
                         clearCanvas(existingShapes, canvas, ctx);  
                         ctx.strokeStyle = "rgba(255,255,255)";
@@ -206,20 +231,38 @@ function clearCanvas(existingShapes: Shape[], canvas: HTMLCanvasElement, ctx: Ca
             ctx.strokeStyle = "rgba(255,255,255)"
             if (shape.type === "rect") {
               ctx.strokeRect(shape.x, shape.y, shape.width, shape.height)
-            } else if (shape.type === "circle") {
+            }
+            
+            else if (shape.type === "circle") {
               ctx.beginPath()
             ctx.arc(shape.centerX, shape.centerY, shape.radius, 0, Math.PI * 2)
               ctx.stroke()
-            }else if (shape.type === "line") {
+            }
+            
+            else if (shape.type === "line") {
             ctx.beginPath();
             ctx.moveTo(shape.startX, shape.startY);
             ctx.lineTo(shape.endX, shape.endY);
             ctx.stroke();
-            } else if(shape.type === "text"){
+            } 
+            
+            else if(shape.type === "text"){
                 ctx.fillStyle = 'white';
                 ctx.font = '20px Arial';
                 ctx.fillText(shape.value , shape.x , shape.y)
-            } else if(shape.type === 'arrow'){
+            } 
+            
+            else if (shape.type === "freehand") {
+             if (shape.points.length > 1) {
+               ctx.beginPath();
+               ctx.strokeStyle = "white";
+               ctx.moveTo(shape.points[0].x, shape.points[0].y);
+
+               shape.points.forEach((p) => ctx.lineTo(p.x, p.y));
+               ctx.stroke();
+            }
+        }      
+            else if(shape.type === 'arrow'){
                    const { startX, startY, endX, endY } = shape;
                    const headLength = 10; 
                    const angle = Math.atan2(endY - startY, endX - startX);
