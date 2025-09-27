@@ -13,7 +13,7 @@ interface Message{
     type: "send" | "received";
 }
 
-function Chat ({token  , roomId} :  {token : string ; roomId : number} ){
+function Chat ({token  , roomId} :  {token : string | null ; roomId : number} ){
 
 
         const [messages , setMessages] = useState<Message[]>([])

@@ -34,7 +34,7 @@ export default function Rooms (){
                     {room.slug}</li>
             ))}
           </ul>
-          {selectedRoom && <Chat token= "" roomId={selectedRoom}/>}
+          {selectedRoom && <Chat token= {token} roomId={selectedRoom}/>}
          
     </div>
 

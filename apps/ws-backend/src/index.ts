@@ -82,7 +82,7 @@ wss.on('connection' , (ws , req)=>{
                        console.error('Failed to save message' , error)
                        queue.unshift(nextMessage)
                     }
-                 },100);
+                 },0);
 
                   for (const user of client.values()) {
                   if(user.rooms.has(parsedMessage.roomId) && user.ws !== ws && user.ws.readyState === WebSocket.OPEN)

@@ -50,7 +50,7 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
             const parsedMessage = JSON.parse(message.data)
 
             if(parsedMessage.type === "chat") {
-                const parsedShape = JSON.parse(parsedMessage.message)
+                const parsedShape = JSON.parse(parsedMessage.content)
                 existingShapes.push(parsedShape)
                 clearCanvas(existingShapes ,canvas,ctx)
             }
@@ -112,22 +112,7 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                         endX : e.offsetX,
                         endY : e.offsetY
                      })
-                     existingShapes.push(newShape)
-                } else if(mode == 'text'){
-                  
-                   createTextInput(e.offsetX , e.offsetY , (inputValue) => {
-                       if(inputValue.trim() != ""){
-                        newShape = ({
-                            type: "text",
-                            x: e.offsetX, 
-                            y : e.offsetY,
-                            value : inputValue
-                        })
-                        existingShapes.push(newShape)
-                        clearCanvas(existingShapes, canvas, ctx);
-                       }
-                   })
-                }else if(mode == 'freehand' && currentFreehand){
+                } else if(mode == 'freehand' && currentFreehand){
                       newShape = currentFreehand;
                       currentFreehand = null; 
                 }
@@ -139,9 +124,39 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                         endX : e.offsetX,
                         endY : e.offsetY
                     })
-                    existingShapes.push(newShape)
 
-                } if(newShape && socket && socket.readyState === WebSocket.OPEN  ){
+
+                }else if(mode == 'text'){
+                  
+                   createTextInput(e.offsetX , e.offsetY , (inputValue) => {
+                       if(inputValue.trim() != ""){
+                        newShape = ({
+                            type: "text",
+                            x: e.offsetX, 
+                            y : e.offsetY,
+                            value : inputValue
+                        })
+                        existingShapes.push(newShape)
+                        clearCanvas(existingShapes, canvas, ctx);
+
+                          if(newShape && socket && socket.readyState === WebSocket.OPEN  ){
+                    existingShapes.push(newShape)
+                    const numRoomId = Number(roomId)
+                  
+                    if(isNaN(numRoomId)){
+                      console.error('roomId is not valid' ,roomId)
+                    }else{
+                      socket.send(JSON.stringify({
+                        type:"chat",
+                        roomId : numRoomId,
+                        content : JSON.stringify(newShape)
+                      }))
+                    }
+                }
+                       }
+                   })
+                }
+                if(newShape && socket && socket.readyState === WebSocket.OPEN  ){
                     existingShapes.push(newShape)
                     const numRoomId = Number(roomId)
                   
