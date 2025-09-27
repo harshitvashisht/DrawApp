@@ -4,18 +4,23 @@ import DrawInit from "@/draw"
 import { useRef, useEffect, useState } from "react"
 import Canvas from "./Canvas"
 
+
 type CanvasProps = {
   roomId: string
 
 }
 
 export default function  RoomCanvas ({ roomId  }: CanvasProps){
-
+    const [token , setToken] = useState<string | null >(null)
     const [socket , setSocket] = useState<WebSocket | null>(null)
     const [mode , setMode] = useState<"rect" | "circle" | "line" | "text" | "arrow" | "freehand">('circle') 
 
     useEffect(() =>{
-        const ws = new WebSocket(`ws://localhost:8080?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZmYTdiNjg2LWI5ZmEtNDI1Yi05MjNiLTEzOTRhYmNhODliZCIsImlhdCI6MTc1ODk0Nzc3OSwiZXhwIjoxNzU4OTUxMzc5fQ.31fZeD5UpN9gNHP7xVu6N02rVqQaGVWTzGs9-nuZ2ao`)
+
+         const t = localStorage.getItem('token')
+         setToken(t)
+
+        const ws = new WebSocket(`ws://localhost:8080?token=${t}`)
          const numRoomId = Number(roomId)
         ws.onopen = () => {
             setSocket(ws)

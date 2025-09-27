@@ -2,14 +2,21 @@
 
 import { httpUrl } from "@repo/backendurls/urls"
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Chat from "./chat";
+ 
 
 
 export default function Rooms (){
 
     const [rooms , setRooms] = useState<any[]>([]);
     const [selectedRoom , setSelectedRoom] = useState<number | null>(null);
+    const [token , setToken] = useState<string | null>(null)
+
+    useEffect(() => {
+        const t = localStorage.getItem('token')
+        setToken(t)
+    },[])
        
     async function handleGetRooms(){
 
@@ -27,7 +34,7 @@ export default function Rooms (){
                     {room.slug}</li>
             ))}
           </ul>
-          {selectedRoom && <Chat token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZmYTdiNjg2LWI5ZmEtNDI1Yi05MjNiLTEzOTRhYmNhODliZCIsImlhdCI6MTc1ODY3MzM2OCwiZXhwIjoxNzU4Njc2OTY4fQ.Oc9lPymCGJF-JWhZ6LTfbjYBlBkca6PcjY9ta8ruAY4" roomId={selectedRoom}/>}
+          {selectedRoom && <Chat token= "" roomId={selectedRoom}/>}
          
     </div>
 

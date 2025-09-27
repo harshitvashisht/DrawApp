@@ -28,10 +28,7 @@ const { roomId } = params
 
 console.log(roomId)
 
-useEffect(() => {
 
-       
-})
 
 return (
     <div>
