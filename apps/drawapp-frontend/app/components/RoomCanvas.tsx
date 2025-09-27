@@ -15,7 +15,7 @@ export default function  RoomCanvas ({ roomId  }: CanvasProps){
     const [mode , setMode] = useState<"rect" | "circle" | "line" | "text" | "arrow" | "freehand">('circle') 
 
     useEffect(() =>{
-        const ws = new WebSocket(`ws://localhost:8080?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZmYTdiNjg2LWI5ZmEtNDI1Yi05MjNiLTEzOTRhYmNhODliZCIsImlhdCI6MTc1ODcwODYyOSwiZXhwIjoxNzU4NzEyMjI5fQ.zmdlSFb-EbN7YevGF2Dl7TPC1xLzsa_xLDyPO-0hG9U`)
+        const ws = new WebSocket(`ws://localhost:8080?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZmYTdiNjg2LWI5ZmEtNDI1Yi05MjNiLTEzOTRhYmNhODliZCIsImlhdCI6MTc1ODk0Nzc3OSwiZXhwIjoxNzU4OTUxMzc5fQ.31fZeD5UpN9gNHP7xVu6N02rVqQaGVWTzGs9-nuZ2ao`)
          const numRoomId = Number(roomId)
         ws.onopen = () => {
             setSocket(ws)

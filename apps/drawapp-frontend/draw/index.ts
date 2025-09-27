@@ -111,6 +111,7 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                         endX : e.offsetX,
                         endY : e.offsetY
                      })
+                     existingShapes.push(newShape)
                 } else if(mode == 'text'){
                   
                    createTextInput(e.offsetX , e.offsetY , (inputValue) => {
@@ -121,6 +122,7 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                             y : e.offsetY,
                             value : inputValue
                         })
+                        existingShapes.push(newShape)
                         clearCanvas(existingShapes, canvas, ctx);
                        }
                    })
@@ -136,6 +138,8 @@ export default async function DrawInit(canvas : HTMLCanvasElement , roomId:strin
                         endX : e.offsetX,
                         endY : e.offsetY
                     })
+                    existingShapes.push(newShape)
+
                 } if(newShape && socket && socket.readyState === WebSocket.OPEN  ){
                     existingShapes.push(newShape)
                     const numRoomId = Number(roomId)
