@@ -1,19 +1,27 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from 'react';
+import SignIn from '../signin/page';
+import { useRouter } from 'next/navigation';
 
 const DrawAppLanding = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const heroRef = useRef(null);
+    const router = useRouter()
+
+ 
 
   useEffect(() => {
+
     const handleMouseMove = (e: { clientX: number; clientY: number; }) => {
       const x = e.clientX / window.innerWidth;
       const y = e.clientY / window.innerHeight;
       setMousePosition({ x, y });
     };
+
+
 
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -41,7 +49,7 @@ const DrawAppLanding = () => {
             <div className="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold">🎨</span>
             </div>
-            <span className="text-xl font-bold text-white tracking-tight">DRAWAPP</span>
+            <span className="text-xl font-bold text-white tracking-tight">𝑫𝒓𝒂𝒘𝑨𝒑𝒑</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -134,8 +142,15 @@ const DrawAppLanding = () => {
       </div>
     </div>
   );
+  type ButtonProps = {
+  children: React.ReactNode;
+  variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'small' | 'default' | 'large';
+  className?: string;
+  onClick?: () => void; // 
+};
 //@ts-ignore
-  const Button = ({ children, variant = 'primary', size = 'default', className = '', ...props }) => {
+  const Button = ({ children, variant = 'primary', size = 'default', className = '',   onClick ,...props }:ButtonProps) => {
     const baseClasses = "font-semibold rounded-xl cursor-pointer inline-flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed";
     
     const sizes = {
@@ -152,11 +167,12 @@ const DrawAppLanding = () => {
 
     return (
         //@ts-ignore
-      <button className={`${baseClasses} ${sizes[size]} ${variants[variant]} ${className}`} {...props}>
+      <button onClick={onClick} className={`${baseClasses} ${sizes[size]} ${variants[variant]} ${className}`} {...props}>
         {children}
       </button>
     );
   };
+
 
   return (
     <div className="font-sans bg-gray-900 text-white overflow-x-hidden min-h-screen">
@@ -200,11 +216,11 @@ const DrawAppLanding = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-            <Button size="large" className="group">
+            <Button onClick={()=>router.push('/canvas/90')} size="large" className="group">
               <span>Join Draw Room</span>
               <span className="ml-2 group-hover:rotate-12 transition-transform">⚡</span>
             </Button>
-            <Button variant="outline" size="large" className="group">
+            <Button onClick={()=>router.push('/signin')} variant="outline" size="large" className="group">
               <span>Join ChatRoom</span>
               <div className="w-2 h-2 bg-red-500 rounded-full ml-2 animate-pulse"></div>
             </Button>
@@ -294,7 +310,7 @@ const DrawAppLanding = () => {
         <div className="max-w-6xl mx-auto text-center relative z-10">
           <h2 className="text-5xl md:text-6xl font-bold mb-8">
             <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-              See DRAWAPP in Action
+              See 𝑫𝒓𝒂𝒘𝑨𝒑𝒑 in Action
             </span>
           </h2>
           <p className="text-xl mb-16 text-gray-300 max-w-3xl mx-auto">
@@ -394,7 +410,7 @@ const DrawAppLanding = () => {
           </div>
           
           <div className="mt-12">
-            <Button size="large" className="group">
+            <Button  onClick={()=>router.push('/canvas/90')} size="large" className="group">
               <span>Try Interactive Demo</span>
               <div className="w-2 h-2 bg-green-400 rounded-full ml-2 animate-ping"></div>
             </Button>
@@ -411,15 +427,15 @@ const DrawAppLanding = () => {
             </span>
           </h2>
           <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Join over 50,000 teams already using DRAWAPP to bring their boldest ideas to life. 
+            Join over 50,000 teams already using 𝑫𝒓𝒂𝒘𝑨𝒑𝒑 to bring their boldest ideas to life. 
             Start your creative journey today - no credit card required.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
-            <Button size="large" className="group">
+            <Button onClick={()=>router.push('/signin')} size="large" className="group">
               <span>Sign In</span>
               <span className="ml-2 group-hover:rotate-12 transition-transform">⚡</span>
             </Button>
-            <Button variant="outline" size="large">
+            <Button onClick={()=>router.push('/signup')} variant="outline" size="large">
               Sign Up
             </Button>
           </div>
@@ -438,7 +454,7 @@ const DrawAppLanding = () => {
                 <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-lg">🎨</span>
                 </div>
-                <span className="text-2xl font-bold text-white">DRAWAPP</span>
+                <span className="text-2xl font-bold text-white">𝑫𝒓𝒂𝒘𝑨𝒑𝒑</span>
               </div>
               <p className="text-gray-400 mb-6 max-w-md">
                 The ultimate collaborative drawing platform for teams who create magic together. 
@@ -476,7 +492,7 @@ const DrawAppLanding = () => {
           
           <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-500 text-sm mb-4 md:mb-0">
-              © 2025 DRAWAPP. All rights reserved. Made with ❤️ for creative teams.
+              © 2025 𝑫𝒓𝒂𝒘𝑨𝒑𝒑. All rights reserved. Made with ❤️ for creative teams.
             </p>
             <div className="flex space-x-6 text-sm text-gray-400">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>

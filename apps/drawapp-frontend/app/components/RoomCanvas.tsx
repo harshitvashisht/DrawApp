@@ -43,51 +43,64 @@ export default function  RoomCanvas ({ roomId  }: CanvasProps){
         </div>
     }
 
-   return <div>
-    <div className="flex space-x-2">
+   return (
+    <div className="relative w-screen h-screen overflow-hidden">
+      
+      <div className="absolute  left-1/2 -translate-x-1/2  bg-black/50   ">
         <button
-          className={`px-4 py-2 rounded ${
-            mode === "rect" ? "bg-blue-600 text-white" : "bg-gray-200"
+          className={`px-3 py-2 rounded-l ${
+            mode === "rect" ? "bg-blue-600 text-white" : "bg-slate-300"
           }`}
           onClick={() => setMode("rect")}
         >
-          <svg data-name="Layer 1" height="32" width="32"  fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 13.5H0v-10h16zm-15-1h14v-8H1z"/></svg>
+          🔲
         </button>
         <button
-          className={`px-4 py-2 rounded ${
-            mode === "circle" ? "bg-blue-600 text-white" : "bg-gray-200"
+          className={`px-3 py-2  ${
+            mode === "circle" ? "bg-blue-600 text-white" : "bg-slate-300"
           }`}
           onClick={() => setMode("circle")}
         >
-         <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" width="40"  height="40"className="text-blue-500 hover:text-red-500"><circle cx="1024" cy="1024" r="768"  /></svg>
+          ⚪
         </button>
-        <button className={`px-4 py-2 rounded ${
-            mode === "line" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }` } 
-          onClick={() => setMode('line')}>
-            <svg data-name="Layer 1" height="32" width="32"  fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M15.5 7.5v1H.5v-1z" className="fill-rule:evenodd"/></svg>
+        <button
+          className={`px-3 py-2  ${
+            mode === "line" ? "bg-blue-600 text-white" : "bg-slate-300"
+          }`}
+          onClick={() => setMode("line")}
+        >
+          ➖
         </button>
-         <button className={`px-4 py-2 rounded ${
-            mode === "text" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }` } 
-          onClick={() => setMode('text')}>
-            Text
+        <button
+          className={`px-3 py-2  ${
+            mode === "text" ? "bg-blue-600 text-white" : "bg-slate-300"
+          }`}
+          onClick={() => setMode("text")}
+        >
+          T
         </button>
-        <button className={`px-4 py-2 rounded  ${
-            mode === "arrow" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }` } 
-          onClick={() => setMode('arrow')} >
-            Arrow
+        <button
+          className={`px-3 py-2  ${
+            mode === "arrow" ? "bg-blue-600 text-white" : "bg-slate-300"
+          }`}
+          onClick={() => setMode("arrow")}
+        >
+          ➡️
         </button>
-        <button className={`px-4 py-2 rounded  ${
-            mode === "freehand" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }` } 
-          onClick={() => setMode('freehand')} >
-            Pencil
+        <button
+          className={`px-3 py-2 rounded-r ${
+            mode === "freehand" ? "bg-blue-600 text-white" : "bg-slate-300"
+          }`}
+          onClick={() => setMode("freehand")}
+        >
+          ✏️
         </button>
       </div>
-           <Canvas roomId={roomId} mode={mode} socket={socket} />
-   </div>
+
+
+      <Canvas roomId={roomId} mode={mode} socket={socket} />
+    </div>
+  );
        
 }
 
