@@ -6,7 +6,7 @@ import Input from "./input";
 import cors from  'cors'
 import { useRef } from "react";
 import { httpUrl } from "@repo/backendurls/urls";
-
+import { useRouter } from "next/navigation";
 
 
 interface AuthPageProps {
@@ -19,6 +19,8 @@ export default function AuthPage({type}: AuthPageProps){
     const passwordRef = useRef<HTMLInputElement>(null)
     const emailRef = useRef<HTMLInputElement>(null)
     const nameRef = useRef<HTMLInputElement>(null)
+    const router = useRouter()
+    
 
       async function handleSignUp(){
            const email = emailRef.current?.value || "";
@@ -34,6 +36,7 @@ export default function AuthPage({type}: AuthPageProps){
            }
         )
          alert("User Signed up")   
+        router.push('/dashboard')
        }
        
        async function handleSignIn(){
@@ -48,8 +51,9 @@ export default function AuthPage({type}: AuthPageProps){
            const jwt = response.data.token 
            localStorage.setItem('token',jwt)
 
-           alert("You Are Signed In !")
-
+           alert('User Siged In !')
+          router.push('/dashboard')
+        
        }
 
     if(type == "signin"){
