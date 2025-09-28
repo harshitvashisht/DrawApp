@@ -8,15 +8,12 @@ import Dashboard from "./dashboard/page";
 import { Routes, Route } from "react-router-dom";
 import SignIn from "./signin/page";
 import SignUp from "./signup/page";
+import CollabDrawLanding from "./components/collablanding";
 
 
 export default function Home() {
   return<div>
-    Collaborate and Create !!
-
-    <div>
-     <Button label={"SignIn"}/>
-     <Button label={"SignUp"}/>
+    <CollabDrawLanding/>
     </div>
-  </div>
+
 }
