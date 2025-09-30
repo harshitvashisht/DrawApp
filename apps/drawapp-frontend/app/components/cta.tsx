@@ -1,3 +1,4 @@
+"use client"
 import Button from "./newbutton";
 import {useRouter} from "next/navigation"
 export default function CTA(){

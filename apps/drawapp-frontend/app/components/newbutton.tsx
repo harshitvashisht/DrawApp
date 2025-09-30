@@ -1,4 +1,4 @@
-
+"use client"
 
   type ButtonProps = {
   children: React.ReactNode;

@@ -1,10 +1,11 @@
+"use client"
 import {useRouter} from "next/navigation"
 import AnimatedCursor from "./animatedcursor";
 import Button from "./newbutton";
 
 export default function DemoSection(){
     const router = useRouter()
-    
+
     return <section className="py-24 px-6 bg-gradient-to-br from-purple-900/30 to-cyan-900/30 relative overflow-hidden">
             <div className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm"></div>
             

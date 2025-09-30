@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react";
 //@ts-ignore
 export default function FloatingOrb({ index, size, position, delay, color }){
