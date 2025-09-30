@@ -4,6 +4,7 @@ import { httpUrl } from "@repo/backendurls/urls"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import Chat from "./chat";
+import Button from "./newbutton";
  
 
 
@@ -16,9 +17,11 @@ export default function Rooms (){
     useEffect(() => {
         const t = localStorage.getItem('token')
         setToken(t)
+        handleGetRooms()
     },[])
        
     async function handleGetRooms(){
+        console.log("Get Rooms button clicked");
 
         const response = await axios.get(`${httpUrl}/getrooms`)
         setRooms(response.data.rooms)
@@ -26,7 +29,6 @@ export default function Rooms (){
     
     return <div>
 
-        <button onClick={handleGetRooms}>Get Rooms</button>
       
           <ul>
             {rooms.map((room)=>(

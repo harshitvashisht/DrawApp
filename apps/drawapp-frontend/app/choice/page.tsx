@@ -13,7 +13,7 @@ export default function RoomSelection() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900/20 to-cyan-900/20">
-      {/* Animated Background Orbs */}
+   
       <div className="absolute inset-0 overflow-hidden">
         <FloatingOrb index={0} size={300} position={{top: '10%', left: '10%'}} delay={0} color="rgba(147, 51, 234, 0.4)" />
         <FloatingOrb index={1} size={200} position={{top: '60%', right: '10%'}} delay={2} color="rgba(6, 182, 212, 0.4)" />
@@ -22,7 +22,7 @@ export default function RoomSelection() {
       </div>
 
       <div className="relative z-10 w-full max-w-7xl px-6 py-12">
-        {/* Header */}
+       
         <div className="text-center mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 mb-4">
             <Sparkles className="w-4 h-4 text-yellow-300" />
@@ -36,9 +36,9 @@ export default function RoomSelection() {
           </p>
         </div>
 
-        {/* Room Cards */}
+       
         <div className="grid md:grid-cols-2 gap-8 md:gap-12">
-          {/* Chat Room Card */}
+        
           <div
             className="group relative"
             onMouseEnter={() => setHoveredRoom('chat')}
@@ -46,10 +46,10 @@ export default function RoomSelection() {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
             <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 border border-white/10 backdrop-blur-sm transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 cursor-pointer overflow-hidden h-full min-h-[500px] flex flex-col">
-              {/* Card Background Animation */}
+             
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
-              {/* Lightning Effect */}
+             
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 rounded-full filter blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
               <div className="relative flex flex-col items-center text-center flex-1 justify-between">
@@ -101,10 +101,10 @@ export default function RoomSelection() {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
             <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 border border-white/10 backdrop-blur-sm transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 cursor-pointer overflow-hidden h-full min-h-[500px] flex flex-col">
-              {/* Card Background Animation */}
+           
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
-              {/* Lightning Effect */}
+            
               <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full filter blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
               <div className="relative flex flex-col items-center text-center flex-1 justify-between">

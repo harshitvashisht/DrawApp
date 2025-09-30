@@ -7,6 +7,7 @@ import cors from  'cors'
 import { useRef } from "react";
 import { httpUrl } from "@repo/backendurls/urls";
 import { useRouter } from "next/navigation";
+import FloatingOrb from "./floatingord";
 
 
 interface AuthPageProps {
@@ -52,13 +53,19 @@ export default function AuthPage({type}: AuthPageProps){
            localStorage.setItem('token',jwt)
 
            alert('User Siged In !')
-          router.push('/dashboard')
+          router.push('/listroom')
         
        }
 
     if(type == "signin"){
 
-       return <div className="flex items-center justify-center min-h-screen bg-gray-900">
+       return <div className="flex items-center justify-center min-h-screen bg-gray-900 bg-gradient-to-br from-gray-900 via-purple-900/20 to-cyan-900/20">
+                 <div className="absolute inset-0 overflow-hidden">
+                <FloatingOrb index={0} size={300} position={{top: '10%', left: '10%'}} delay={0} color="rgba(147, 51, 234, 0.4)" />
+                <FloatingOrb index={1} size={200} position={{top: '60%', right: '10%'}} delay={2} color="rgba(6, 182, 212, 0.4)" />
+                <FloatingOrb index={2} size={250} position={{bottom: '20%', left: '20%'}} delay={4} color="rgba(168, 85, 247, 0.3)" />
+                <FloatingOrb index={3} size={150} position={{top: '30%', right: '30%'}} delay={1} color="rgba(14, 165, 233, 0.3)" />
+              </div>
            <div className="group p-8 rounded-2xl border border-cyan-500/20 hover:border-cyan-400/50 hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300 hover:-translate-y-2 bg-gray-800/50 backdrop-blur-md">
            <div>
             <h1 className="text-2xl flex justify-center text-white test-bold">
@@ -75,7 +82,13 @@ export default function AuthPage({type}: AuthPageProps){
           </div>
        </div>
     }
-       return <div className="flex items-center justify-center min-h-screen bg-gray-900">
+       return <div className="flex items-center justify-center min-h-screen bg-gray-900 bg-gradient-to-br from-gray-900 via-purple-900/20 to-cyan-900/20">
+          <div className="absolute inset-0 overflow-hidden">
+                <FloatingOrb index={0} size={300} position={{top: '10%', left: '10%'}} delay={0} color="rgba(147, 51, 234, 0.4)" />
+                <FloatingOrb index={1} size={200} position={{top: '60%', right: '10%'}} delay={2} color="rgba(6, 182, 212, 0.4)" />
+                <FloatingOrb index={2} size={250} position={{bottom: '20%', left: '20%'}} delay={4} color="rgba(168, 85, 247, 0.3)" />
+                <FloatingOrb index={3} size={150} position={{top: '30%', right: '30%'}} delay={1} color="rgba(14, 165, 233, 0.3)" />
+              </div>
            <div  className="group p-8 rounded-2xl border border-cyan-500/20 hover:border-cyan-400/50 hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300 hover:-translate-y-2 bg-gray-800/50 backdrop-blur-md">
             <div>
             <h1 className="text-2xl flex justify-center text-white test-bold">
