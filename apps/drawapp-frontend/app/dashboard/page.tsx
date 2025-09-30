@@ -1,10 +1,7 @@
-import Rooms from "../components/rooms";
-
-
+import HeroSection from "../components/herosection";
 
 export default function Dashboard() {
   return <div>
-    <h1>Hello</h1>
-    <Rooms/>
+    <HeroSection/>
   </div>
 }

@@ -1,3 +1,4 @@
+"use client"
 import {useRouter} from "next/navigation"
 import FloatingOrb from "./floatingord";
 import Button from "./newbutton";

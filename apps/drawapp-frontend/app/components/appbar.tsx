@@ -1,5 +1,5 @@
+"use client"
 import { useEffect, useState } from "react";
-
 
 export default function AppBar (){
     const [scrolled, setScrolled] = useState(false);
