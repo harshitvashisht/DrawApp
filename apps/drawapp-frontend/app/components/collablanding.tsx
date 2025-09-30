@@ -3,175 +3,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SignIn from '../signin/page';
 import { useRouter } from 'next/navigation';
+import AppBar from './appbar';
+import FloatingOrb from './floatingord';
+import FeatureCard from './featurecard';
+import Button from './newbutton';
+import AnimatedCursor from './animatedcursor';
+import Footer from './footer';
+import CTA from './cta';
 
 const DrawAppLanding = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+
   const heroRef = useRef(null);
     const router = useRouter()
-
- 
-
-  useEffect(() => {
-
-    const handleMouseMove = (e: { clientX: number; clientY: number; }) => {
-      const x = e.clientX / window.innerWidth;
-      const y = e.clientY / window.innerHeight;
-      setMousePosition({ x, y });
-    };
-
-
-
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('scroll', handleScroll);
-    
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  const AppBar = () => (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled 
-        ? 'bg-gray-900/95 backdrop-blur-lg border-b border-gray-800/50 shadow-2xl' 
-        : 'bg-transparent'
-    }`}>
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">🎨</span>
-            </div>
-            <span className="text-xl font-bold text-white tracking-tight">𝑫𝒓𝒂𝒘𝑨𝒑𝒑</span>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-300 hover:text-white transition-colors duration-200">Features</a>
-            <a href="#pricing" className="text-gray-300 hover:text-white transition-colors duration-200">Pricing</a>
-            <a href="#about" className="text-gray-300 hover:text-white transition-colors duration-200">About</a>
-            <div className="relative group">
-            </div>
-          </div>
-
-    
-
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden text-white"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <span className="text-2xl">✕</span> : <span className="text-2xl">☰</span>}
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-gray-900/95 backdrop-blur-lg border-t border-gray-800/50 py-4">
-            <div className="flex flex-col space-y-4">
-              <a href="#features" className="text-gray-300 hover:text-white transition-colors px-4 py-2">Features</a>
-              <a href="#pricing" className="text-gray-300 hover:text-white transition-colors px-4 py-2">Pricing</a>
-              <a href="#about" className="text-gray-300 hover:text-white transition-colors px-4 py-2">About</a>
-              <a href="#" className="text-gray-300 hover:text-white transition-colors px-4 py-2">Documentation</a>
-              <div className="border-t border-gray-800 pt-4 px-4">
-                <button className="w-full text-gray-300 hover:text-white transition-colors mb-2 py-2">Sign In</button>
-                <button className="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg font-medium">Sign Up Free</button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </nav>
-  );
-//@ts-ignore
-  const FloatingOrb = ({ index, size, position, delay, color }) => {
-    const moveX = (mousePosition.x - 0.5) * (index + 1) * 30;
-    const moveY = (mousePosition.y - 0.5) * (index + 1) * 30;
-
-    return (
-      <div
-        className="absolute rounded-full blur-xl transition-transform duration-500 ease-out animate-pulse"
-        style={{
-          width: `${size}px`,
-          height: `${size}px`,
-          background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
-          ...position,
-          transform: `translate(${moveX}px, ${moveY}px)`,
-          animationDuration: '6s',
-          animationDelay: `${delay}s`,
-        }}
-      />
-    );
-  };
-//@ts-ignore
-  const FeatureCard = ({ icon, title, description, gradient }) => (
-    <div className="group relative p-8 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-2xl hover:border-gray-600/50 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/10 overflow-hidden">
-      <div className={`absolute inset-0 bg-gradient-to-r ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-2xl`} />
-      
-      <div className={`relative w-16 h-16 bg-gradient-to-r ${gradient} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-        <span className="text-2xl">{icon}</span>
-      </div>
-      <h3 className="text-xl font-semibold mb-4 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-cyan-400 transition-all duration-300">
-        {title}
-      </h3>
-      <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-        {description}
-      </p>
-    </div>
-  );
-//@ts-ignore
-  const AnimatedCursor = ({ color, position, delay, name }) => (
-    <div className="absolute group" style={position}>
-      <div
-        className="w-4 h-4 rounded-full animate-ping shadow-lg"
-        style={{
-          backgroundColor: color,
-          animationDelay: `${delay}s`,
-          animationDuration: '3s',
-        }}
-      />
-      <div className="absolute -top-8 left-6 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-        {name}
-      </div>
-    </div>
-  );
-  type ButtonProps = {
-  children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'outline';
-  size?: 'small' | 'default' | 'large';
-  className?: string;
-  onClick?: () => void; // 
-};
-//@ts-ignore
-  const Button = ({ children, variant = 'primary', size = 'default', className = '',   onClick ,...props }:ButtonProps) => {
-    const baseClasses = "font-semibold rounded-xl cursor-pointer inline-flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed";
-    
-    const sizes = {
-      small: "px-4 py-2 text-sm",
-      default: "px-8 py-4 text-lg",
-      large: "px-12 py-6 text-xl"
-    };
-    
-    const variants = {
-      primary: "bg-gray-700 hover:bg-gray-600 text-white shadow-lg hover:shadow-xl focus:ring-gray-600/50",
-      secondary: "bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 hover:border-gray-500 shadow-lg hover:shadow-xl focus:ring-gray-600/50",
-      outline: "bg-transparent text-white border-2 border-gray-600 hover:bg-gray-800 hover:border-gray-500 focus:ring-gray-600/50"
-    };
-
-    return (
-        //@ts-ignore
-      <button onClick={onClick} className={`${baseClasses} ${sizes[size]} ${variants[variant]} ${className}`} {...props}>
-        {children}
-      </button>
-    );
-  };
 
 
   return (
@@ -418,90 +261,8 @@ const DrawAppLanding = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 px-6 bg-gradient-to-b from-black to-gray-900">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-6xl font-bold mb-8">
-            <span className="bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
-              Ready to Transform Your Team's Creativity?
-            </span>
-          </h2>
-          <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Join over 50,000 teams already using 𝑫𝒓𝒂𝒘𝑨𝒑𝒑 to bring their boldest ideas to life. 
-            Start your creative journey today - no credit card required.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
-            <Button onClick={()=>router.push('/signin')} size="large" className="group">
-              <span>Sign In</span>
-              <span className="ml-2 group-hover:rotate-12 transition-transform">⚡</span>
-            </Button>
-            <Button onClick={()=>router.push('/signup')} variant="outline" size="large">
-              Sign Up
-            </Button>
-          </div>
-          <p className="text-gray-500 text-sm">
-            Free forever plan • No setup fees • Cancel anytime
-          </p>
-        </div>
-      </section>
-
-      {/* Enhanced Footer */}
-      <footer className="py-16 px-6 bg-black border-t border-gray-800">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            <div className="md:col-span-2">
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">🎨</span>
-                </div>
-                <span className="text-2xl font-bold text-white">𝑫𝒓𝒂𝒘𝑨𝒑𝒑</span>
-              </div>
-              <p className="text-gray-400 mb-6 max-w-md">
-                The ultimate collaborative drawing platform for teams who create magic together. 
-                Transform ideas into reality with real-time collaboration.
-              </p>
-              <div className="flex space-x-4">
-                {['T', 'L', 'G', 'D'].map((social, index) => (
-                  <a key={index} href="#" className="w-10 h-10 bg-gray-800 hover:bg-gray-700 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-all duration-200 hover:scale-110">
-                    {social}
-                  </a>
-                ))}
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="text-white font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Enterprise</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">API</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-white font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Community</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Status</a></li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-500 text-sm mb-4 md:mb-0">
-              © 2025 𝑫𝒓𝒂𝒘𝑨𝒑𝒑. All rights reserved. Made with ❤️ for creative teams.
-            </p>
-            <div className="flex space-x-6 text-sm text-gray-400">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Cookies</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+     <CTA/>
+     <Footer/>
     </div>
   );
 };
