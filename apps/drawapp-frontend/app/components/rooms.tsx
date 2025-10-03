@@ -21,8 +21,7 @@ export default function Rooms (){
     },[])
        
     async function handleGetRooms(){
-        console.log("Get Rooms button clicked");
-
+        
         const response = await axios.get(`${httpUrl}/getrooms`)
         setRooms(response.data.rooms)
     }

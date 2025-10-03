@@ -37,7 +37,7 @@ export default function AuthPage({type}: AuthPageProps){
            }
         )
          alert("User Signed up")   
-        router.push('/dashboard')
+        router.push('/signin')
        }
        
        async function handleSignIn(){
@@ -53,7 +53,7 @@ export default function AuthPage({type}: AuthPageProps){
            localStorage.setItem('token',jwt)
 
            alert('User Siged In !')
-          router.push('/listroom')
+          router.push('/choice')
         
        }
 

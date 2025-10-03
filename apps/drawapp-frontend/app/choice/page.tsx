@@ -2,13 +2,15 @@
 import React, { useState } from 'react';
 import { MessageCircle, Users, Sparkles, Zap, ArrowRight } from 'lucide-react';
 import FloatingOrb from '../components/floatingord';
-
+import { useRouter } from 'next/navigation';
 
 export default function RoomSelection() {
   const [hoveredRoom, setHoveredRoom] = useState<string | null>(null);
+  const router = useRouter()
 
   const handleJoinRoom = (roomType: string) => {
     alert(`Joining ${roomType}...`);
+    router.push('/listroom')
   };
 
   return (
