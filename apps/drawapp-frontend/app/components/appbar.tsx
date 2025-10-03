@@ -35,7 +35,7 @@ export default function AppBar (){
     }`}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
+
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold">🎨</span>
@@ -43,11 +43,10 @@ export default function AppBar (){
             <span className="text-xl font-bold text-white tracking-tight">𝑫𝒓𝒂𝒘𝑨𝒑𝒑</span>
           </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <a href="#features" className="text-gray-300 hover:text-white transition-colors duration-200">Features</a>
-            <a href="#pricing" className="text-gray-300 hover:text-white transition-colors duration-200">Pricing</a>
-            <a href="#about" className="text-gray-300 hover:text-white transition-colors duration-200">About</a>
+            <a href="/signin" className="text-gray-300 hover:text-white transition-colors duration-200">SignIn</a>
+            <a href="/signup" className="text-gray-300 hover:text-white transition-colors duration-200">SignUp</a>
             <div className="relative group">
             </div>
           </div>

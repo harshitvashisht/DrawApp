@@ -31,7 +31,10 @@ export default function Rooms (){
   {rooms.map((room) => (
     <div
       key={room.id}
-      onClick={() => router.push(`/chat/${room.id}`)}
+      onClick={() => {
+       localStorage.setItem('currentRoom', JSON.stringify(room));
+       router.push(`/chat/${room.id}`);
+  }}
       className="group relative overflow-hidden bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 hover:from-cyan-500 hover:via-cyan-600 hover:to-cyan-700 focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-400/60 hover:-translate-y-1"
       style={{ aspectRatio: '1 / 1' }}>
 
