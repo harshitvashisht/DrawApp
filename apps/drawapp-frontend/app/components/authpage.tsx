@@ -4,7 +4,7 @@ import Button from "./button";
 import Heading from "./heading";
 import Input from "./input";
 import cors from  'cors'
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { httpUrl } from "@repo/backendurls/urls";
 import { useRouter } from "next/navigation";
 import FloatingOrb from "./floatingord";
@@ -21,14 +21,16 @@ export default function AuthPage({type}: AuthPageProps){
     const emailRef = useRef<HTMLInputElement>(null)
     const nameRef = useRef<HTMLInputElement>(null)
     const router = useRouter()
+    const [loader , setLoader] = useState(false)
     
 
       async function handleSignUp(){
+          
            const email = emailRef.current?.value || "";
            const password = passwordRef.current?.value || "";
            const name = nameRef.current?.value || "";
            const username = usernameRef.current?.value || ""
-
+           setLoader(true)
            const response = await axios.post(`${httpUrl}/signup` ,{
                      email,
                      password,
@@ -36,12 +38,13 @@ export default function AuthPage({type}: AuthPageProps){
                      username
            }
         )
-         alert("User Signed up")   
-        router.push('/signin')
+         alert("User Signed up") 
+         router.push('/signin')
+          setLoader(false) 
        }
        
        async function handleSignIn(){
-                
+                setLoader(true)
            const username = usernameRef.current?.value || "";
            const password = passwordRef.current?.value  || "";
 
@@ -54,12 +57,13 @@ export default function AuthPage({type}: AuthPageProps){
 
            alert('User Siged In !')
           router.push('/choice')
+          setLoader(false)
         
        }
 
     if(type == "signin"){
 
-       return <div className="flex items-center justify-center min-h-screen bg-gray-900 bg-gradient-to-br from-gray-900 via-purple-900/20 to-cyan-900/20">
+       return  <div className="flex items-center justify-center min-h-screen bg-gray-900 bg-gradient-to-br from-gray-900 via-purple-900/20 to-cyan-900/20">
                  <div className="absolute inset-0 overflow-hidden">
                 <FloatingOrb index={0} size={300} position={{top: '10%', left: '10%'}} delay={0} color="rgba(147, 51, 234, 0.4)" />
                 <FloatingOrb index={1} size={200} position={{top: '60%', right: '10%'}} delay={2} color="rgba(6, 182, 212, 0.4)" />
@@ -76,9 +80,15 @@ export default function AuthPage({type}: AuthPageProps){
             <Input referannce={passwordRef} label="Password " Placeholder="**********" />
             </div>
            </div>
-           <div className="mt-4 flex justify-center ">
-          <Button onclick={handleSignIn} label="SignIn"/>
+         {loader ? (
+          <div className="flex justify-center mt-4">
+            <div className="w-6 h-6 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
           </div>
+        ) : (
+          <div className="mt-4 flex justify-center">
+            <Button onclick={handleSignIn} label="SignIn" />
+          </div>
+        )}
           </div>
        </div>
     }
@@ -105,9 +115,15 @@ export default function AuthPage({type}: AuthPageProps){
             </div>
             </div>
            </div>
-           <div className="mt-4 flex justify-center ">
-          <Button onclick={handleSignUp} label="SignUp"/>
+           {loader ? (
+          <div className="flex justify-center mt-4">
+            <div className="w-6 h-6 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
           </div>
+        ) : (
+          <div className="mt-4 flex justify-center">
+            <Button onclick={handleSignIn} label="SignIn" />
+          </div>
+        )}
           </div>
        </div>
     

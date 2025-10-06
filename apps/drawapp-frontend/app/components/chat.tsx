@@ -48,8 +48,8 @@ function Chat ({token  , roomId , roomSlug} :  {token : string | null ; roomId :
     
  
         }  
-        return<div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
-  <div className="w-full max-w-4xl h-[90vh] flex flex-col bg-gray-800/50 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden">
+        return<div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 pt-20">
+  <div className="w-full max-w-4xl h-[calc(100vh-6rem)] flex flex-col bg-gray-800/50 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden">
     <div className="bg-gradient-to-r from-cyan-500 to-cyan-600 px-6 py-4 flex items-center justify-between shadow-lg">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
