@@ -1,6 +1,6 @@
 
 interface InputProps{
-    label : string, 
+    label? : string, 
      Placeholder : string
      referannce : any
 }
