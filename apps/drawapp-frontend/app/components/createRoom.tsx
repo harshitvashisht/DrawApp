@@ -7,15 +7,19 @@ import { useRef, useState } from "react";
 import Button from "./button";
 import { headers } from "next/headers";
 
-export default  function CreateRoom(){
+export default  function CreateRoom({ open, setOpen }: { open: boolean; setOpen: (val: boolean) => void }){
 
       const roomRef = useRef<HTMLInputElement>(null)
-      const [open , setOpen] = useState(false)
+    
 
       async function handleCreateRoom(){
 
         const roomname = roomRef.current?.value 
-
+        if(!roomname){
+            alert('Enter Room Name')
+            setOpen(false)
+            return
+        }
         await axios.post(`${httpUrl}/room`,{ 
             room: roomname
          },  {
@@ -25,6 +29,7 @@ export default  function CreateRoom(){
   }
 );
         alert('Room-Created')
+        setOpen(false)
       }
 
 
