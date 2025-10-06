@@ -121,7 +121,7 @@ export default function AuthPage({type}: AuthPageProps){
           </div>
         ) : (
           <div className="mt-4 flex justify-center">
-            <Button onclick={handleSignIn} label="SignIn" />
+            <Button onclick={handleSignUp} label="SignUp" />
           </div>
         )}
           </div>

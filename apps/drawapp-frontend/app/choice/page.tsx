@@ -94,8 +94,6 @@ export default function RoomSelection() {
               </div>
             </div>
           </div>
-
-          {/* Collaboration Room Card */}
           <div
             className="group relative"
             onMouseEnter={() => setHoveredRoom('collab')}
