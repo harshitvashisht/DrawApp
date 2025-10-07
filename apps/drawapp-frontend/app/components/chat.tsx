@@ -1,8 +1,9 @@
 "use client"
 import React,{useState , useEffect} from "react";
-import {wsUrl }from '@repo/backendurls/urls'
+import {httpUrl, wsUrl }from '@repo/backendurls/urls'
 import { Socket } from "dgram";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 
 
@@ -19,6 +20,12 @@ function Chat ({token  , roomId , roomSlug} :  {token : string | null ; roomId :
         const [messages , setMessages] = useState<Message[]>([])
         const [ws , setWs] = useState<WebSocket | null>(null);
         const [input , setInput] = useState('')
+        const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+           useEffect(() => {
+           const id = localStorage.getItem("token"); 
+           setCurrentUserId(id);
+           }, []);   
         
 
         useEffect(() =>{
@@ -37,6 +44,8 @@ function Chat ({token  , roomId , roomSlug} :  {token : string | null ; roomId :
                   } 
             }   
                     setWs(websocket)     
+
+                    messageHistory()
         },[roomId])
  
       
@@ -46,6 +55,15 @@ function Chat ({token  , roomId , roomSlug} :  {token : string | null ; roomId :
              setMessages((prev) => [...prev, {type : "send" , content: input }]);
              setInput("");
         }  
+
+       async function messageHistory(){
+             const response = await axios.get(`${httpUrl}/chats/${roomId}`)
+             const msgs = response.data.messages.map((msg: any) => ({
+             type: msg.userId === currentUserId ? "send" : "received", 
+             content: msg.message, 
+    }));
+             setMessages(msgs.reverse())
+        }
         
         return<div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 pt-20">
   <div className="w-full max-w-4xl h-[calc(100vh-6rem)] flex flex-col bg-gray-800/50 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden">
