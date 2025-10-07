@@ -2,12 +2,13 @@
 import React, { useState } from "react";
 import {MessageSquare,Users, Plus, LogOut,Home,Settings,TrendingUp,Clock, Crown, Search} from "lucide-react";
 import Rooms from "../components/rooms";
+import AppBar from "../components/appbar";
 
 export default function UserDashboard() {
   const [count , setCount] = useState(0)
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
-
+      <AppBar type="afterAuth"/>
       <main className="max-w-7xl mx-auto px-6 py-8 pt-16">
         {/* Welcome Section */}
         <div className="mb-8">

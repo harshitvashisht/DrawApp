@@ -59,9 +59,9 @@ function Chat ({token  , roomId , roomSlug} :  {token : string | null ; roomId :
        async function messageHistory(){
              const response = await axios.get(`${httpUrl}/chats/${roomId}`)
              const msgs = response.data.messages.map((msg: any) => ({
-             type: msg.userId === currentUserId ? "send" : "received", 
-             content: msg.message, 
-    }));
+             type: msg.userId === currentUserId ? "send" : "received",
+             content: msg.message,
+}));
              setMessages(msgs.reverse())
         }
         

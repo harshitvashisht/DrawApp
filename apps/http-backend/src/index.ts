@@ -152,6 +152,17 @@ app.get('/getrooms' ,async(req:Request , res: Response)=>{
          
 })
 
+app.get('/myroom' ,authMiddleware, async(req:Request , res:Response)=>{
+   try {
+    //@ts-ignore
+    const userId = req.id
+    const rooms = await prismaClient.room.findMany({where: {adminId : userId}})
+    res.json({ rooms });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch user's rooms" });
+  }
+})
+
 app.listen(3001, () => {
   console.log('Server running at http://localhost:3001')
 })

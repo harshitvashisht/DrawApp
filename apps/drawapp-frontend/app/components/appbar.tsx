@@ -1,5 +1,5 @@
 "use client"
-import { LogOut , Settings } from "lucide-react";
+import { LogOut , Settings , User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -72,7 +72,7 @@ export default function AppBar ({type} : AppBarProps){
         ? 'bg-gray-900/95 backdrop-blur-lg border-b border-gray-800/50 shadow-2xl' 
         : 'bg-transparent'
     }`}>
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
 
           <div className="flex items-center space-x-2">
@@ -85,7 +85,8 @@ export default function AppBar ({type} : AppBarProps){
           <div className="hidden md:flex items-center space-x-10">
             <a href="#features" className="text-gray-300 hover:text-white transition-colors duration-200">Features</a>
             <a href="#setting" className="text-gray-300 hover:text-white transition-colors duration-200"><Settings/></a>
-            <LogOut onClick={handleLogOut}/>
+            <LogOut className="text-gray-300 hover:text-white transition-colors duration-200" onClick={handleLogOut}/>
+            <User onClick={()=>router.push('/dashboard')} className="text-gray-300 hover:text-white transition-colors duration-200"/>
             <div className="relative group">
             </div>
           </div>
