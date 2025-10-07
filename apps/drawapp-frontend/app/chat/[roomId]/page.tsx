@@ -1,5 +1,6 @@
 "use client";
 
+import AppBar from "@/app/components/appbar";
 import Chat from "@/app/components/chat";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -18,6 +19,7 @@ export default function ChatPage() {
     }
   }, []);
   return <div>
+          <AppBar type="afterAuth" />
           <Chat token={token} roomId={Number(roomId)} roomSlug = {roomSlug} />
   </div>
   

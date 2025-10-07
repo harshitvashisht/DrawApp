@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { MessageCircle, Users, Sparkles, Zap, ArrowRight } from 'lucide-react';
 import FloatingOrb from '../components/floatingord';
 import { useRouter } from 'next/navigation';
+import AppBar from '../components/appbar';
 
 export default function RoomSelection() {
   const [hoveredRoom, setHoveredRoom] = useState<string | null>(null);
@@ -15,7 +16,7 @@ export default function RoomSelection() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900/20 to-cyan-900/20">
-   
+     <AppBar type='afterAuth' />
       <div className="absolute inset-0 overflow-hidden">
         <FloatingOrb index={0} size={300} position={{top: '10%', left: '10%'}} delay={0} color="rgba(147, 51, 234, 0.4)" />
         <FloatingOrb index={1} size={200} position={{top: '60%', right: '10%'}} delay={2} color="rgba(6, 182, 212, 0.4)" />
