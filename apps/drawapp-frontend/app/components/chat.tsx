@@ -45,9 +45,8 @@ function Chat ({token  , roomId , roomSlug} :  {token : string | null ; roomId :
              ws.send(JSON.stringify({type : "chat" ,roomId : roomId, content : input}))
              setMessages((prev) => [...prev, {type : "send" , content: input }]);
              setInput("");
-    
- 
         }  
+        
         return<div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 pt-20">
   <div className="w-full max-w-4xl h-[calc(100vh-6rem)] flex flex-col bg-gray-800/50 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden">
     <div className="bg-gradient-to-r from-cyan-500 to-cyan-600 px-6 py-4 flex items-center justify-between shadow-lg">
