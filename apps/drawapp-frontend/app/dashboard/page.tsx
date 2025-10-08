@@ -5,11 +5,14 @@ import Rooms from "../components/rooms";
 import AppBar from "../components/appbar";
 import axios from "axios";
 import { httpUrl } from "@repo/backendurls/urls";
+import { useRouter } from "next/navigation";
 
 export default function UserDashboard() {
   const [count , setCount] = useState(0)
+  const [myRoom , setMyRoom] = useState<any[]>([])
   const [myroomCount , setMyroomCount]= useState(0)
   const [username , setUsername] = useState<string | null>(null)
+  const router = useRouter()
 
   useEffect(()=>{
     const loadusername = localStorage.getItem('username')
@@ -23,6 +26,7 @@ export default function UserDashboard() {
       }
      })
      setMyroomCount(response.data.rooms.length)
+     setMyRoom(response.data.rooms)
  }
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
@@ -69,7 +73,7 @@ export default function UserDashboard() {
         {/* Rooms Section */}
         <div className="bg-gray-800 rounded-xl p-6 shadow-lg mb-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-            <h2 className="text-2xl font-bold">All Rooms</h2>
+            <h2 className="text-2xl font-bold">My Rooms</h2>
             <div className="flex items-center gap-3">
               <div className="relative flex-1 md:flex-initial md:w-64">
                 <Search
@@ -88,8 +92,50 @@ export default function UserDashboard() {
               </button>
             </div>
           </div>
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+  {myRoom.map((room) => (
+    <div
+      key={room.id}
+      onClick={() => {
+        localStorage.setItem('currentRoom', JSON.stringify(room));
+        router.push(`/chat/${room.id}`);
+      }}
+      className="group relative w-full h-32 bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900 rounded-xl cursor-pointer overflow-hidden"
+    >
+      {/* Animated background blobs */}
+      <div className="absolute -top-8 -right-8 w-24 h-24 bg-gray-600/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+      <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-gray-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+      
+      {/* Shine effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
-          <Rooms onCountChange={(count)=>setCount(count)} />
+      {/* Content */}
+      <div className="relative h-full p-4 flex flex-col justify-between">
+        {/* Top section */}
+        <div className="flex items-start justify-between">
+          <div className="p-2 bg-white/5 backdrop-blur-sm rounded-lg group-hover:rotate-12 transition-transform duration-300">
+            <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </div>
+          <div className="px-2 py-1 bg-white/10 backdrop-blur-sm rounded-full">
+            <span className="text-gray-300 text-xs font-medium">Active</span>
+          </div>
+        </div>
+
+        {/* Room name */}
+        <div>
+          <h3 className="text-lg font-bold text-gray-100 group-hover:scale-105 transition-transform duration-300">
+            {room.slug}
+          </h3>
+        </div>
+      </div>
+
+  
+      <div className="absolute inset-0 rounded-xl border border-gray-600/50 group-hover:border-gray-500/70 transition-colors duration-300"></div>
+    </div>
+  ))}
+</div>
         </div>
 
         {/* Recent Activity Section */}
