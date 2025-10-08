@@ -52,12 +52,16 @@ export default function AuthPage({type}: AuthPageProps){
                  username,
                  password
            })
+          if (!response.data.token) {
+          alert("Invalid username or password");
+          setLoader(false);
+          return;
+    }
            const jwt = response.data.token 
            localStorage.setItem('token',jwt)
-
            alert('User Siged In !')
-          router.push('/choice')
-          setLoader(false)
+           router.push('/choice')
+           setLoader(false)
         
        }
 

@@ -65,9 +65,11 @@ app.post('/signin', async function (req:Request , res: Response) {
      } 
      const passwordmatch = await bcrypt.compare(password, user.password)
 
-     if(passwordmatch){
-
-      const token = jwt.sign({
+     if(!passwordmatch){
+      return res.json({
+        message: "Password Not Matched"
+      })
+     }const token = jwt.sign({
          id: user.id.toString()
       },JWT_SECRET,{expiresIn: '1h'})
 
@@ -75,7 +77,6 @@ app.post('/signin', async function (req:Request , res: Response) {
         message :"user Signed In" ,
         token
       })
-     }
 
 })
 
