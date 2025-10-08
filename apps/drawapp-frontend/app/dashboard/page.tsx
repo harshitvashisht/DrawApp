@@ -1,24 +1,42 @@
 "use client"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {MessageSquare,Users, Plus, LogOut,Home,Settings,TrendingUp,Clock, Crown, Search} from "lucide-react";
 import Rooms from "../components/rooms";
 import AppBar from "../components/appbar";
+import axios from "axios";
+import { httpUrl } from "@repo/backendurls/urls";
 
 export default function UserDashboard() {
   const [count , setCount] = useState(0)
+  const [myroomCount , setMyroomCount]= useState(0)
+  const [username , setUsername] = useState<string | null>(null)
+
+  useEffect(()=>{
+    const loadusername = localStorage.getItem('username')
+    setUsername(loadusername)
+    getuserRooms()
+  },[])
+ async function getuserRooms() {
+     const response = await axios.get(`${httpUrl}/myroom`,{
+      headers : {
+        Authorization : localStorage.getItem('token')
+      }
+     })
+     setMyroomCount(response.data.rooms.length)
+ }
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <AppBar type="afterAuth"/>
       <main className="max-w-7xl mx-auto px-6 py-8 pt-16">
-        {/* Welcome Section */}
+       
         <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-2">Welcome back, John! 👋</h2>
+          <h2 className="text-3xl font-bold mb-2">Welcome back , {username} 👋</h2>
           <p className="text-gray-400">
             Here's what's happening with your collaboration spaces
           </p>
         </div>
 
-        {/* Stats Grid */}
+       
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between mb-2">
@@ -34,7 +52,7 @@ export default function UserDashboard() {
               <h3 className="text-sm font-medium text-pink-100">Admin Rooms</h3>
               <Crown size={24} className="text-pink-200" />
             </div>
-            <p className="text-3xl font-bold">5</p>
+            <p className="text-3xl font-bold">{myroomCount}</p>
             <p className="text-xs text-pink-200 mt-1">Rooms you created</p>
           </div>
 

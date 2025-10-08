@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 export default function Rooms ({ onCountChange }: { onCountChange?: (count: number) => void }){
  
     const [rooms , setRooms] = useState<any[]>([]);
-    const [selectedRoom , setSelectedRoom] = useState<number | null>(null);
     const [token , setToken] = useState<string | null>(null)
     
    const router = useRouter()

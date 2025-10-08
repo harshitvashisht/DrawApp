@@ -75,7 +75,8 @@ app.post('/signin', async function (req:Request , res: Response) {
 
       res.json({
         message :"user Signed In" ,
-        token
+        token,
+        username : user.username
       })
 
 })

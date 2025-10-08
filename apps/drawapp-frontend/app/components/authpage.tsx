@@ -59,6 +59,7 @@ export default function AuthPage({type}: AuthPageProps){
     }
            const jwt = response.data.token 
            localStorage.setItem('token',jwt)
+           localStorage.setItem('username',username)
            alert('User Siged In !')
            router.push('/choice')
            setLoader(false)
