@@ -17,12 +17,13 @@ datasource db {
 model User {
      id String @id @default(uuid())
      username   String @unique
-     name String 
+     name String  
      password String
      email String 
      photo String ?
      chats   Chat[]
      rooms Room[]
+     activities Activity[]
 }
 
 model Room {
@@ -43,4 +44,13 @@ model Chat {
   rooms   Room @relation(fields: [roomId], references: [id])
   user    User @relation(fields: [userId], references: [id])
  
+}
+
+model Activity {
+  id Int @id @default(autoincrement())
+  userId String
+  action String
+  time DateTime @default(now())
+  metadata Json ?
+  user User @relation(fields: [userId] , references: [id])
 }

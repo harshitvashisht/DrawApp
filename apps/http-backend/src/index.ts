@@ -6,6 +6,7 @@ import cors from 'cors'
 import { JWT_SECRET } from '@repo/backend-common/config'
 import {CreateUserSchema, CreateSigninSchema, CreateRoomSchema} from "@repo/common/types"
 import authMiddleware from './middleware'
+import { logActivity } from './logger'
 const app = express()
 
 app.use(express.json())
@@ -98,7 +99,9 @@ app.post('/room', authMiddleware ,async function (req:Request , res: Response) {
              adminId : id
       }
     })
-
+    //@ts-ignore
+    await logActivity(req.id, "Created a room", { roomSlug: data.data.room, roomId: room.id });
+    console.log("activity happednd")
     return res.json ({
       message: "room-Created",
       room
