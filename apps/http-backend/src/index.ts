@@ -168,6 +168,36 @@ app.get('/myroom' ,authMiddleware, async(req:Request , res:Response)=>{
   }
 })
 
+app.delete('/deleteroom/:roomId', authMiddleware, async (req: Request, res: Response) => {
+  try {
+    //@ts-ignore
+    const userId = req.id;
+    const roomId = Number(req.params.roomId);
+
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    if (isNaN(roomId)) return res.status(400).json({ message: "Invalid room ID" });
+
+    const room = await prismaClient.room.findUnique({ where: { id: roomId } });
+    if (!room) return res.status(404).json({ message: "Room not found" });
+
+    if (room.adminId !== userId) {
+      return res.status(403).json({ message: "UnAuthorized" });
+    }
+
+    await prismaClient.room.delete({ where: { id: roomId } });
+
+    await logActivity(userId, "Deleted a room", { roomId });
+
+    return res.json({ message: "Room deleted", roomId });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+
+
 app.listen(3001, () => {
   console.log('Server running at http://localhost:3001')
 })
