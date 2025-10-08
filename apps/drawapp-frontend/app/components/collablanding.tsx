@@ -11,7 +11,7 @@ const DrawAppLanding = () => {
 
   return (
     <div className="font-sans bg-gray-900 text-white overflow-x-hidden min-h-screen">
-      <AppBar type='beforeAuth'/>
+     <AppBar type='beforeAuth'/>
      <HeroSection/>
      <FeatureSection/>
      <DemoSection/>

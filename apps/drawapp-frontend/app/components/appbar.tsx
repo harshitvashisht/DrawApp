@@ -1,5 +1,5 @@
 "use client"
-import { LogOut , Settings , User } from "lucide-react";
+import { LogOut , Settings , User  , Home} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -59,7 +59,7 @@ export default function AppBar ({type} : AppBarProps){
           </div>
 
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-300 hover:text-white transition-colors duration-200">Features</a>
+             <Home onClick={()=>router.push('/')} className="text-gray-300 hover:text-white transition-colors duration-200" />
             <a href="/signin" className="text-gray-300 hover:text-white transition-colors duration-200">SignIn</a>
             <a href="/signup" className="text-gray-300 hover:text-white transition-colors duration-200">SignUp</a>
             <div className="relative group">
@@ -83,10 +83,10 @@ export default function AppBar ({type} : AppBarProps){
           </div>
 
           <div className="hidden md:flex items-center space-x-10">
-            <a href="#features" className="text-gray-300 hover:text-white transition-colors duration-200">Features</a>
+            <Home onClick={()=>router.push('/')} className="text-gray-300 hover:text-white transition-colors duration-200" />
             <a href="#setting" className="text-gray-300 hover:text-white transition-colors duration-200"><Settings/></a>
-            <LogOut className="text-gray-300 hover:text-white transition-colors duration-200" onClick={handleLogOut}/>
             <User onClick={()=>router.push('/dashboard')} className="text-gray-300 hover:text-white transition-colors duration-200"/>
+            <LogOut className="text-gray-300 hover:text-white transition-colors duration-200" onClick={handleLogOut}/>
             <div className="relative group">
             </div>
           </div>

@@ -6,17 +6,20 @@ import AppBar from "../components/appbar";
 import axios from "axios";
 import { httpUrl } from "@repo/backendurls/urls";
 import { useRouter } from "next/navigation";
+import CreateRoom from "../components/createRoom";
 
 export default function UserDashboard() {
-  const [count , setCount] = useState(0)
+  const [count , setCount] = useState<string | null >(null)
   const [myRoom , setMyRoom] = useState<any[]>([])
   const [myroomCount , setMyroomCount]= useState(0)
   const [username , setUsername] = useState<string | null>(null)
+  const [open , setOpen] = useState(false)
   const router = useRouter()
 
   useEffect(()=>{
     const loadusername = localStorage.getItem('username')
     setUsername(loadusername)
+    setCount(localStorage.getItem('roomLength'))
     getuserRooms()
   },[])
  async function getuserRooms() {
@@ -27,6 +30,9 @@ export default function UserDashboard() {
      })
      setMyroomCount(response.data.rooms.length)
      setMyRoom(response.data.rooms)
+ }
+ function roomcreation(){
+      setOpen(true)
  }
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
@@ -86,10 +92,11 @@ export default function UserDashboard() {
                   className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
-              <button className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors flex items-center space-x-2 whitespace-nowrap">
+              <button onClick={()=>roomcreation()} className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors flex items-center space-x-2 whitespace-nowrap">
                 <Plus size={20} />
                 <span>Create Room</span>
               </button>
+              {open && <CreateRoom open={open} setOpen={setOpen}  />}
             </div>
           </div>
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

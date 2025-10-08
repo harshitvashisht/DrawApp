@@ -8,7 +8,7 @@ import Button from "./newbutton";
 import { useRouter } from "next/navigation";
 
 
-export default function Rooms ({ onCountChange }: { onCountChange?: (count: number) => void }){
+export default function Rooms (){
  
     const [rooms , setRooms] = useState<any[]>([]);
     const [token , setToken] = useState<string | null>(null)
@@ -25,7 +25,7 @@ export default function Rooms ({ onCountChange }: { onCountChange?: (count: numb
 
         const response = await axios.get(`${httpUrl}/getrooms`)
         setRooms(response.data.rooms)
-        if(onCountChange) onCountChange(response.data.rooms.length)
+        localStorage.setItem('roomLength' , response.data.rooms.length)
     }
     return <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-fr">
      
