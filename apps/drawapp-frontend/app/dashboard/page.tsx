@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import {MessageSquare,Users, Plus, LogOut,Home,Settings,TrendingUp,Clock, Crown, Search} from "lucide-react";
+import {MessageSquare,Users, Plus, LogOut,Home,Settings,TrendingUp,Clock, Crown, Search , CircleX} from "lucide-react";
 import Rooms from "../components/rooms";
 import AppBar from "../components/appbar";
 import axios from "axios";
@@ -14,6 +14,7 @@ export default function UserDashboard() {
   const [myroomCount , setMyroomCount]= useState(0)
   const [username , setUsername] = useState<string | null>(null)
   const [open , setOpen] = useState(false)
+  const [getActivity , setGetActivity] = useState<any[]>([])
   const router = useRouter()
 
   useEffect(()=>{
@@ -21,7 +22,9 @@ export default function UserDashboard() {
     setUsername(loadusername)
     setCount(localStorage.getItem('roomLength'))
     getuserRooms()
+    getactivity()
   },[])
+
  async function getuserRooms() {
      const response = await axios.get(`${httpUrl}/myroom`,{
       headers : {
@@ -33,6 +36,28 @@ export default function UserDashboard() {
  }
  function roomcreation(){
       setOpen(true)
+ }
+
+ async function deleteRoom(roomId: any){
+      const response = await axios.delete(`${httpUrl}/deleteroom/${roomId}` ,{
+        headers:{
+          Authorization : localStorage.getItem('token')
+        }
+      })
+      if(response.data.message === "Room deleted"){
+        alert('Room Deleted Successfully')
+      } else{
+        alert('Room Can not be deleted !')
+      }
+ }
+
+ async function getactivity(){
+       const response = await axios.get(`${httpUrl}/getactivity` ,{
+        headers : {
+          Authorization : localStorage.getItem('token')
+        }
+       })
+       setGetActivity(response.data.response)
  }
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
@@ -113,24 +138,21 @@ export default function UserDashboard() {
       <div className="absolute -top-8 -right-8 w-24 h-24 bg-gray-600/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
       <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-gray-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
       
-      {/* Shine effect */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-
-      {/* Content */}
       <div className="relative h-full p-4 flex flex-col justify-between">
-        {/* Top section */}
         <div className="flex items-start justify-between">
           <div className="p-2 bg-white/5 backdrop-blur-sm rounded-lg group-hover:rotate-12 transition-transform duration-300">
             <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
           </div>
-          <div className="px-2 py-1 bg-white/10 backdrop-blur-sm rounded-full">
-            <span className="text-gray-300 text-xs font-medium">Active</span>
+             <button onClick={(e) => {
+              e.stopPropagation();
+              deleteRoom(room.id);
+              }} className="absolute top-2 right-2 p-1.5 rounded-full bg-gray-800/70 hover:bg-red-600/80 transition-colors z-50" title="Delete Room" >
+               <CircleX className="w-5 h-5 text-white" />
+             </button>
           </div>
-        </div>
-
-        {/* Room name */}
         <div>
           <h3 className="text-lg font-bold text-gray-100 group-hover:scale-105 transition-transform duration-300">
             {room.slug}
@@ -151,11 +173,28 @@ export default function UserDashboard() {
             <Clock size={24} />
             <span>Recent Activity</span>
           </h2>
-          <ul className="space-y-3 text-gray-300">
-            <li>🟣 You created “UI Design Room” 2 hours ago</li>
-            <li>🟢 Anna joined “Project Alpha”</li>
-            <li>🔵 Message sent in “Frontend Discussion”</li>
-          </ul>
+                <ul className="space-y-2">
+          {getActivity && getActivity.length > 0 ? (
+            getActivity.map((item, index) => (
+              <li 
+                key={index}
+                className="flex items-start gap-3 p-3 rounded-lg bg-gray-800/50 hover:bg-gray-800 transition-colors"
+              >
+                <span className="flex-shrink-0 w-2 h-2 mt-1.5 bg-green-500 rounded-full animate-pulse" />
+                <div className="flex-1 min-w-0">
+                  <span className="text-gray-300">
+                    {item.action}{" "}
+                    <span className="font-medium text-blue-400">"{item.metadata.roomSlug}"</span>
+                  </span>
+                </div>
+              </li>
+            ))
+          ) : (
+            <li className="flex items-center justify-center p-8 text-gray-500 bg-gray-800/30 rounded-lg">
+              <span className="text-sm">No recent activity</span>
+            </li>
+          )}
+        </ul>  
         </div>
       </main>
     </div>

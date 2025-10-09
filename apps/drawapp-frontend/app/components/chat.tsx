@@ -4,6 +4,8 @@ import {httpUrl, wsUrl }from '@repo/backendurls/urls'
 import { Socket } from "dgram";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 
 
 
@@ -21,6 +23,8 @@ function Chat ({token  , roomId , roomSlug} :  {token : string | null ; roomId :
         const [ws , setWs] = useState<WebSocket | null>(null);
         const [input , setInput] = useState('')
         const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+        const router = useRouter()
+
 
            useEffect(() => {
            const id = localStorage.getItem("token"); 
@@ -64,21 +68,28 @@ function Chat ({token  , roomId , roomSlug} :  {token : string | null ; roomId :
 }));
              setMessages(msgs.reverse())
         }
-        
+        function leaveRoom(){
+          ws?.close()
+          router.push('/listroom')
+        }
         return<div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 pt-20">
   <div className="w-full max-w-4xl h-[calc(100vh-6rem)] flex flex-col bg-gray-800/50 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden">
     <div className="bg-gradient-to-r from-cyan-500 to-cyan-600 px-6 py-4 flex items-center justify-between shadow-lg">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center ">
           <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
         </div>
         <div>
-          <h2 className="text-white font-semibold text-lg">{roomSlug}</h2>
+          <h2 className="text-white font-semibold text-lg"><span>{roomSlug}</span>
+          </h2>
           <p className="text-cyan-100 text-xs">3 members online</p>
         </div>
       </div>
+      <button title="Leave Room">
+         <LogOut onClick={()=>leaveRoom()}/>
+          </button>
     </div>
     <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-900/30">
       {messages.map((message, index) => (

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import Chat from "./chat";
 import Button from "./newbutton";
 import { useRouter } from "next/navigation";
+import Loader from "./loader";
 
 
 export default function Rooms (){
@@ -22,12 +23,12 @@ export default function Rooms (){
     },[])
        
     async function handleGetRooms(){
-
         const response = await axios.get(`${httpUrl}/getrooms`)
         setRooms(response.data.rooms)
         localStorage.setItem('roomLength' , response.data.rooms.length)
     }
-    return <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-fr">
+    return <>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-fr">
      
   {rooms.map((room) => (
     <div
@@ -65,4 +66,5 @@ export default function Rooms (){
     </div>
   ))}
 </div>
+</>
 }

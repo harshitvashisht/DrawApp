@@ -186,7 +186,7 @@ app.delete('/deleteroom/:roomId', authMiddleware, async (req: Request, res: Resp
 
     await prismaClient.room.delete({ where: { id: roomId } });
 
-    await logActivity(userId, "Deleted a room", { roomId });
+    await logActivity(userId, "Deleted a room", { roomId , roomSlug : room.slug });
 
     return res.json({ message: "Room deleted", roomId });
   } catch (error) {
@@ -195,7 +195,18 @@ app.delete('/deleteroom/:roomId', authMiddleware, async (req: Request, res: Resp
   }
 });
 
-
+app.get('/getactivity', authMiddleware , async function (req:Request , res : Response) {
+//@ts-ignore   
+  const userId = req.id 
+  const response = await prismaClient.activity.findMany({where: {userId : userId},
+     take : 3 , 
+     orderBy : {'id' : "desc"}
+  })
+  return res.json({
+    message: "Your-Activities",
+    response
+  })
+})
 
 
 app.listen(3001, () => {
