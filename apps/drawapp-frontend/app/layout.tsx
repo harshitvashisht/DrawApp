@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AppBar from "./components/appbar";
 import Footer from "./components/footer";
+import { useEffect } from "react";
+import UnloadHandler from "./components/unloadhandler";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,13 +26,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <UnloadHandler/>
+
         {children}
-        
-        
         <Footer/>
       </body>
     </html>

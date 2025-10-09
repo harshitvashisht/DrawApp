@@ -19,13 +19,7 @@ export default function HeroSection (){
             </div>
     
             {/* Hero Content */}
-            <div className="text-center z-10 relative max-w-6xl px-6">
-              <div className="mb-8">
-                <span className="inline-block px-4 py-2 bg-gray-800/60 border border-gray-700/50 rounded-full text-gray-300 text-sm font-medium mb-8 backdrop-blur-sm">
-                  ✨ Now with real-time AI assistance
-                </span>
-              </div>
-              
+            <div className="text-center z-10 relative max-w-6xl px-6">              
               <h1 className="text-6xl md:text-8xl font-black mb-8 leading-tight">
                 <span className="bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
                   Create

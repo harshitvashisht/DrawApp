@@ -14,13 +14,7 @@ export default function Footer(){
                 The ultimate collaborative drawing platform for teams who create magic together. 
                 Transform ideas into reality with real-time collaboration.
               </p>
-              <div className="flex space-x-4">
-                {['T', 'L', 'G', 'D'].map((social, index) => (
-                  <a key={index} href="#" className="w-10 h-10 bg-gray-800 hover:bg-gray-700 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-all duration-200 hover:scale-110">
-                    {social}
-                  </a>
-                ))}
-              </div>
+  
             </div>
             
             <div>
