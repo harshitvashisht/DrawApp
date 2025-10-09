@@ -1,17 +1,25 @@
 
 "use client"
 
+
 import { useEffect } from "react";
 
+export default function  UnLoadHandler() {
+   useEffect(() => {
+    const isNewSession = !sessionStorage.getItem("sessionStarted");
 
-export default function UnloadHandler(){
-    useEffect(()=>{
-        const handleUnload = () => {
-      localStorage.clear()
+    if (isNewSession) {
+      localStorage.clear();
+      sessionStorage.setItem("sessionStarted", "true");
+    }
+    const handleBeforeUnload = () => {
     };
 
-    window.addEventListener("beforeunload", handleUnload);
-    return () => window.removeEventListener("beforeunload", handleUnload);
-    },[])
-    return null;
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  return null;
 }
