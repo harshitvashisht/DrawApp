@@ -26,11 +26,14 @@ function Chat ({token  , roomId , roomSlug} :  {token : string | null ; roomId :
         const router = useRouter()
 
 
-           useEffect(() => {
-           const id = localStorage.getItem("token"); 
-           setCurrentUserId(id);
-           }, []);   
-        
+       useEffect(() => {
+         const token = localStorage.getItem("token");
+         if (token) {
+           const decoded: any = jwtDecode(token);
+           console.log("Decoded Token:", decoded);
+           setCurrentUserId(decoded.id);
+         }
+       }, []);
 
         useEffect(() =>{
 
@@ -67,6 +70,8 @@ function Chat ({token  , roomId , roomSlug} :  {token : string | null ; roomId :
              content: msg.message,
 }));
              setMessages(msgs.reverse())
+             console.log("Comparing:", msgs.userId, "with", currentUserId);
+
         }
         function leaveRoom(){
           ws?.close()

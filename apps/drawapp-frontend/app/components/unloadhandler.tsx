@@ -13,7 +13,7 @@ export default function  UnLoadHandler() {
       sessionStorage.setItem("sessionStarted", "true");
     }
     const handleBeforeUnload = () => {
-    };
+    }; //marking the tab closing 
 
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
