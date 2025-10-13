@@ -91,8 +91,7 @@ wss.on('connection' , (ws , req)=>{
                     roomId, 
                     content : parsedMessage.content
                   }))
-                }};  
-              
+                }};
               } 
                catch (error) {
              console.error('Invalid JSON' , message)
