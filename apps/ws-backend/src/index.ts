@@ -12,6 +12,8 @@ const wss = new WebSocketServer ({port: 8080})
  }
 const client = new Map<string, Client>()
 let queue : any[] =[]
+let senderScoket : null | WebSocket;
+let recieverSocket  : null | WebSocket;
 
 wss.on('connection' , (ws , req)=>{
       const token = req.url?.split('token=')[1]
@@ -91,8 +93,53 @@ wss.on('connection' , (ws , req)=>{
                     roomId, 
                     content : parsedMessage.content
                   }))
-                }};
-              } 
+                }}
+                else if (parsedMessage.type === "createOffer") {
+          const { targetUserId, sdp, roomId } = parsedMessage;
+          const targetUser = client.get(targetUserId);
+
+          if (targetUser && targetUser.ws.readyState === WebSocket.OPEN) {
+            targetUser.ws.send(
+              JSON.stringify({
+                type: "offer",
+                sdp,
+                roomId,
+                senderId: userId,
+              })
+            );
+          }
+        }
+        else if (parsedMessage.type === "createAnswer") {
+          const { targetUserId, sdp, roomId } = parsedMessage;
+          const targetUser = client.get(targetUserId);
+
+          if (targetUser && targetUser.ws.readyState === WebSocket.OPEN) {
+            targetUser.ws.send(
+              JSON.stringify({
+                type: "answer",
+                sdp,
+                roomId,
+                senderId: userId,
+              })
+            );
+          }
+        }
+        else if (parsedMessage.type === "iceCandidate") {
+          const { targetUserId, candidate, roomId } = parsedMessage;
+          const targetUser = client.get(targetUserId);
+
+          if (targetUser && targetUser.ws.readyState === WebSocket.OPEN) {
+            targetUser.ws.send(
+              JSON.stringify({
+                type: "iceCandidate",
+                candidate,
+                roomId,
+                senderId: userId,
+              })
+            );
+          }
+        }
+              }
                catch (error) {
              console.error('Invalid JSON' , message)
           } 
